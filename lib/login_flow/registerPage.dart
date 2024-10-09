@@ -49,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          widget.isFromLogin ? "Reset Pin" : "Sign up",
+          widget.isFromLogin ? "Reset Pin" : "Sign Up",
           style: const TextStyle(
               fontWeight: FontWeight.w600, fontSize: 22, color: Colors.white),
         ),
@@ -140,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       color: Colors.grey.shade200),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
@@ -186,9 +186,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: TextField(
                         controller: answer,
                         decoration: InputDecoration(
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            border: InputBorder.none),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none),
+                        ),
                       ))),
               const SizedBox(
                 height: 40,
