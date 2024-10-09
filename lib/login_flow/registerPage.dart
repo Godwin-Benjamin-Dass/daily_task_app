@@ -47,6 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: Theme.of(context).primaryColor,
         automaticallyImplyLeading: widget.isFromLogin,
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           widget.isFromLogin ? "Reset Pin" : "Sign up",
           style: const TextStyle(
@@ -66,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "Set Pin",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                  color: Colors.black87,
                   fontSize: 20,
                 ),
               ),
@@ -77,6 +78,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Pinput(
                 controller: pin,
                 obscureText: true,
+                defaultPinTheme: PinTheme(
+                  width: 56,
+                  height: 60,
+                  textStyle: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               )),
               const SizedBox(
                 height: 20,
@@ -85,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "Confirm Pin",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                  color: Colors.black87,
                   fontSize: 20,
                 ),
               ),
@@ -96,6 +109,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Pinput(
                 controller: cPin,
                 obscureText: true,
+                defaultPinTheme: PinTheme(
+                  width: 56,
+                  height: 60,
+                  textStyle: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               )),
               const SizedBox(
                 height: 20,
@@ -104,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "Security Question?",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                  color: Colors.black87,
                   fontSize: 20,
                 ),
               ),
@@ -148,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "Your answer",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                  color: Colors.black87,
                   fontSize: 20,
                 ),
               ),
@@ -191,7 +216,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 backgroundColor: Colors.red,
                                 content: const Center(
                                   child: Text(
-                                    'please fill all the details',
+                                    'Please fill all the details',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
@@ -212,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 backgroundColor: Colors.red,
                                 content: const Center(
                                   child: Text(
-                                    'The pins should be equal',
+                                    'The pins should be Same',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
@@ -245,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 content: Center(
                                   child: Text(
                                     widget.isFromLogin
-                                        ? "Edited Sucessfully!!"
+                                        ? "Pin Changed Sucessfully!!"
                                         : 'Thankyou for choosing us!!',
                                     style: const TextStyle(
                                         color: Colors.white,
@@ -257,10 +282,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           }
                         },
                         child: const Text(
-                          "continue",
+                          "Continue",
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
-                              fontSize: 15,
+                              fontSize: 18,
                               color: Colors.white),
                         ))),
               )

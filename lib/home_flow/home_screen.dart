@@ -33,14 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 120),
-          child: SafeArea(
-            child: Container(
-              color: Theme.of(context).primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Row(
                       children: [
                         const Text(
                           'Daily Task/Activity',
@@ -78,51 +79,51 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       ],
                     ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              size: 40,
-                              Icons.health_and_safety,
-                              color: Colors.white,
-                            )),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              size: 40,
-                              Icons.school,
-                              color: Colors.white,
-                            )),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              size: 40,
-                              Icons.currency_rupee,
-                              color: Colors.white,
-                            )),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              size: 40,
-                              Icons.mood,
-                              color: Colors.white,
-                            )),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Image.asset(
-                              "assets/images/sleeping_icon.png",
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                              color: Colors.white,
-                            ))
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            size: 40,
+                            Icons.health_and_safety,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            size: 40,
+                            Icons.school,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            size: 40,
+                            Icons.currency_rupee,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            size: 40,
+                            Icons.mood,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Image.asset(
+                            "assets/images/sleeping_icon.png",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            color: Colors.white,
+                          ))
+                    ],
+                  )
+                ],
               ),
             ),
           )),

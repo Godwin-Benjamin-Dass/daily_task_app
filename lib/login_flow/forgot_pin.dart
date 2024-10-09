@@ -32,7 +32,12 @@ class _forgotPinState extends State<forgotPin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isFromHome ? "Reset Pin" : 'Forgot PIN'),
+        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          widget.isFromHome ? "Reset Pin" : 'Forgot PIN',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -50,7 +55,7 @@ class _forgotPinState extends State<forgotPin> {
               question ?? "",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black54,
+                color: Colors.black,
                 fontSize: 20,
               ),
             ),
@@ -61,7 +66,9 @@ class _forgotPinState extends State<forgotPin> {
               controller: answer,
               decoration: InputDecoration(
                   labelText: 'Answer',
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none),
                   fillColor: Colors.grey.shade200,
                   filled: true),
             ),
@@ -72,9 +79,8 @@ class _forgotPinState extends State<forgotPin> {
                 height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(Color(0xff0D4194))),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
                     onPressed: () {
                       if (ans == answer.text) {
                         Navigator.push(
@@ -108,7 +114,10 @@ class _forgotPinState extends State<forgotPin> {
                         );
                       }
                     },
-                    child: const Text("Verify")))
+                    child: const Text(
+                      "Verify",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    )))
           ],
         ),
       ),
