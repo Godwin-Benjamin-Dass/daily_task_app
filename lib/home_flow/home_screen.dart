@@ -1,4 +1,5 @@
 import 'package:daily_task_app/home_flow/add_task_popup.dart';
+import 'package:daily_task_app/home_flow/settings_page.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/widgets/task_tile_widget.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 120),
+          preferredSize: const Size(double.infinity, 130),
           child: Container(
             color: Theme.of(context).primaryColor,
             child: Padding(
@@ -49,6 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.w700, color: Colors.white),
                         ),
                         const Spacer(),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SettingsPage()));
+                            },
+                            icon: const Icon(
+                              Icons.settings,
+                              color: Colors.white,
+                            )),
                         InkWell(
                           onTap: () async {
                             final DateTime? picked = await showDatePicker(

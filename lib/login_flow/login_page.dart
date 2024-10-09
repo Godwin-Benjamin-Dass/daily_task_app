@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(150), // Set your desired radius
               ),
               child: Image.asset(
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     // Image.asset(

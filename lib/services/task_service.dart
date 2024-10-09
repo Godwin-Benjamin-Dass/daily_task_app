@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:daily_task_app/models/task_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -82,5 +84,21 @@ class TaskService {
       where: 'id = ?',
       whereArgs: [taskId],
     );
+  }
+
+  static Future saveDefaultTask(
+      {required List<TaskModel> tasks, required String type}) async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.setString(type, jsonEncode(tasks.map((ele) => ele.toJson())));
+  }
+
+  static Future<List<TaskModel>> getDefalutTasks({required String type}) async {
+    final pref = await SharedPreferences.getInstance();
+    final List<Map<String, dynamic>> maps =
+        jsonDecode(pref.getString(type) ?? '[]');
+
+    return List.generate(maps.length, (i) {
+      return TaskModel.fromJson(maps[i]);
+    });
   }
 }

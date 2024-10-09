@@ -12,6 +12,9 @@ class TaskProvider extends ChangeNotifier {
   List<TaskModel> _dailyTask = [];
   List<TaskModel> get dailyTask => _dailyTask;
 
+  List<TaskModel> _deafultTask = [];
+  List<TaskModel> get deafultTask => _deafultTask;
+
   getAllTask() async {
     _allTask = await TaskService.getAllTasks();
     notifyListeners();
@@ -133,6 +136,47 @@ class TaskProvider extends ChangeNotifier {
       _allTask.removeAt(idx);
     }
     await TaskService.deleteTask(id);
+    notifyListeners();
+  }
+
+  addOrEditDefaultTask(TaskModel task) async {
+    int idx = _deafultTask.indexWhere((ele) => ele.id == task.id);
+    if (idx != -1) {
+      _deafultTask[idx] = task;
+    } else {
+      _deafultTask.add(task);
+    }
+    notifyListeners();
+  }
+
+  deleteDefaultTask(String id) async {
+    int idx = _deafultTask.indexWhere((ele) => ele.id == id);
+    if (idx != -1) {
+      _deafultTask.removeAt(idx);
+    }
+    notifyListeners();
+  }
+
+  copyDefalutTasks({required DateTime date, required String type}) async {
+    _deafultTask.clear();
+    List<TaskModel> tasks = await TaskService.getDefalutTasks(type: type);
+    for (var task in tasks) {
+      TaskModel taskToBeAdded = TaskModel(
+          id: DateTime.now().toString(),
+          task: task.task,
+          date: date,
+          category: task.category,
+          description: task.description,
+          endTime: task.endTime,
+          startTime: task.startTime,
+          icon: task.icon,
+          link: task.link,
+          status: task.status);
+      _dailyTask.add(taskToBeAdded);
+
+      addOrEditAllTask(taskToBeAdded);
+    }
+
     notifyListeners();
   }
 

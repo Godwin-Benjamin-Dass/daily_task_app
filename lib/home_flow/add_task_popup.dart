@@ -10,6 +10,7 @@ addTaskDialog(BuildContext context,
     {required bool isEdit,
     String? type,
     TaskModel? task,
+    String? defaultType,
     required DateTime date}) async {
   String? inComplete;
   String? inProgress;
@@ -67,6 +68,24 @@ addTaskDialog(BuildContext context,
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Please select end time')));
           return;
+        }
+        if (defaultType != null) {
+          Provider.of<TaskProvider>(context, listen: false)
+              .addOrEditDefaultTask(TaskModel(
+                  id: isEdit ? task!.id : DateTime.now().toString(),
+                  task: taskController.text.trim(),
+                  link: linkController.text.trim(),
+                  startTime: startTime,
+                  endTime: endTime,
+                  category: category,
+                  description: desController.text.trim(),
+                  icon: selectedTaskIconName,
+                  status: 'incomplete'))
+              .then((val) {
+            if (val) {
+              Navigator.pop(context);
+            }
+          });
         }
         if (isEdit) {
           Provider.of<TaskProvider>(context, listen: false)
