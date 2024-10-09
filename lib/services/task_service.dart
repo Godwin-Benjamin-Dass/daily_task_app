@@ -89,13 +89,21 @@ class TaskService {
   static Future saveDefaultTask(
       {required List<TaskModel> tasks, required String type}) async {
     final pref = await SharedPreferences.getInstance();
-    await pref.setString(type, jsonEncode(tasks.map((ele) => ele.toJson())));
+    List data = [];
+    for (TaskModel task in tasks) {
+      data.add(task.toJson());
+    }
+    await pref.setString(type, jsonEncode(data));
   }
 
   static Future<List<TaskModel>> getDefalutTasks({required String type}) async {
     final pref = await SharedPreferences.getInstance();
-    final List<Map<String, dynamic>> maps =
-        jsonDecode(pref.getString(type) ?? '[]');
+    String? data = pref.getString(type);
+
+    if (data == null) {
+      return [];
+    }
+    final List maps = jsonDecode(data);
 
     return List.generate(maps.length, (i) {
       return TaskModel.fromJson(maps[i]);

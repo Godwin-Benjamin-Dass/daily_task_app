@@ -1,3 +1,4 @@
+import 'package:daily_task_app/home_flow/device_app_screen.dart';
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/static_data.dart';
@@ -85,6 +86,7 @@ addTaskDialog(BuildContext context,
             if (val) {
               Navigator.pop(context);
             }
+            return;
           });
         }
         if (isEdit) {
@@ -313,6 +315,14 @@ addTaskDialog(BuildContext context,
                 const SizedBox(
                   height: 10,
                 ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DeviceAppScreen()));
+                    },
+                    child: const Text('Add apps')),
                 if (isEdit)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

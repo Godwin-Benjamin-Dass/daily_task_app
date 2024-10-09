@@ -1,7 +1,6 @@
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/models/time_slot.dart';
 import 'package:daily_task_app/services/task_service.dart';
-import 'package:daily_task_app/static_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -12,7 +11,7 @@ class TaskProvider extends ChangeNotifier {
   List<TaskModel> _dailyTask = [];
   List<TaskModel> get dailyTask => _dailyTask;
 
-  List<TaskModel> _deafultTask = [];
+  final List<TaskModel> _deafultTask = [];
   List<TaskModel> get deafultTask => _deafultTask;
 
   getAllTask() async {
@@ -23,9 +22,14 @@ class TaskProvider extends ChangeNotifier {
   List<TaskModel> _analyseTask = [];
   List<TaskModel> get analyseTask => _analyseTask;
 
-  copyDefalutTask({required DateTime date}) {
+  Future copyDefalutTask({required DateTime date, required String type}) async {
     _dailyTask.clear();
-    for (var task in tASKS) {
+    List<TaskModel> tasks = await TaskService.getDefalutTasks(type: type);
+    if (tasks.isEmpty) {
+      Fluttertoast.showToast(msg: 'Default Task is empty!,');
+      return;
+    }
+    for (var task in tasks) {
       TaskModel taskToBeAdded = TaskModel(
           id: DateTime.now().toString(),
           task: task.task,
@@ -142,11 +146,22 @@ class TaskProvider extends ChangeNotifier {
   addOrEditDefaultTask(TaskModel task) async {
     int idx = _deafultTask.indexWhere((ele) => ele.id == task.id);
     if (idx != -1) {
+      final possible = isSlotAvailable(task.startTime!, task.endTime!,
+          isDeafult: true, idx: idx);
+      if (!possible) {
+        Fluttertoast.showToast(
+            msg: 'the slot is not available',
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+
+        return false;
+      }
       _deafultTask[idx] = task;
     } else {
       _deafultTask.add(task);
     }
     notifyListeners();
+    return true;
   }
 
   deleteDefaultTask(String id) async {
@@ -157,14 +172,13 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  copyDefalutTasks({required DateTime date, required String type}) async {
+  copyDefalutTasksToDefaultTask({required String type}) async {
     _deafultTask.clear();
     List<TaskModel> tasks = await TaskService.getDefalutTasks(type: type);
     for (var task in tasks) {
       TaskModel taskToBeAdded = TaskModel(
           id: DateTime.now().toString(),
           task: task.task,
-          date: date,
           category: task.category,
           description: task.description,
           endTime: task.endTime,
@@ -172,12 +186,30 @@ class TaskProvider extends ChangeNotifier {
           icon: task.icon,
           link: task.link,
           status: task.status);
-      _dailyTask.add(taskToBeAdded);
-
-      addOrEditAllTask(taskToBeAdded);
+      _deafultTask.add(taskToBeAdded);
     }
+    _deafultTask.sort((a, b) {
+      int dateComparison = a.date!.compareTo(b.date!);
+      if (dateComparison != 0) {
+        return dateComparison; // If the dates are different, return the comparison
+      }
+      // If the dates are the same, compare the startTime
+      return a.startTime!.hour.compareTo(b.startTime!.hour) != 0
+          ? a.startTime!.hour.compareTo(b.startTime!.hour)
+          : a.startTime!.minute.compareTo(b.startTime!.minute);
+    });
 
     notifyListeners();
+  }
+
+  Future saveDefaultTask({required String type}) async {
+    if (_deafultTask.isEmpty) {
+      Fluttertoast.showToast(msg: 'please add some task');
+      return false;
+    }
+    TaskService.saveDefaultTask(tasks: _deafultTask, type: type);
+    Fluttertoast.showToast(msg: 'saved');
+    return true;
   }
 
   getTasksForToAnalyse(
@@ -202,12 +234,14 @@ class TaskProvider extends ChangeNotifier {
     return _analyseTask;
   }
 
-  bool isSlotAvailable(TimeOfDay startTime, TimeOfDay endTime, {int? idx}) {
+  bool isSlotAvailable(TimeOfDay startTime, TimeOfDay endTime,
+      {int? idx, bool isDeafult = false}) {
+    List<TaskModel> tasksToBeChecked = isDeafult ? _deafultTask : _dailyTask;
     List<TimeSlot> existingSlots = [];
-    for (int i = 0; i < _dailyTask.length; i++) {
+    for (int i = 0; i < tasksToBeChecked.length; i++) {
       if (i != idx) {
-        existingSlots
-            .add(TimeSlot(_dailyTask[i].startTime!, _dailyTask[i].endTime!));
+        existingSlots.add(TimeSlot(
+            tasksToBeChecked[i].startTime!, tasksToBeChecked[i].endTime!));
       }
     }
 

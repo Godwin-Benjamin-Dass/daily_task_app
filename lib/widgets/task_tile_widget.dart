@@ -13,11 +13,13 @@ class TaskTileWidget extends StatefulWidget {
     required this.task,
     required this.idx,
     this.isAnalyseTask = false,
+    this.isDefault = false,
   });
   final Function() ontap;
   final TaskModel task;
   final int idx;
   final bool isAnalyseTask;
+  final bool isDefault;
 
   @override
   State<TaskTileWidget> createState() => _TaskTileWidgetState();
@@ -71,8 +73,13 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                           color: Colors.red, shape: BoxShape.circle),
                       child: IconButton(
                           onPressed: () {
-                            Provider.of<TaskProvider>(context, listen: false)
-                                .deleteTask(id: widget.task.id!);
+                            if (widget.isDefault) {
+                              Provider.of<TaskProvider>(context, listen: false)
+                                  .deleteDefaultTask(widget.task.id!);
+                            } else {
+                              Provider.of<TaskProvider>(context, listen: false)
+                                  .deleteTask(id: widget.task.id!);
+                            }
                           },
                           icon: const Icon(
                             Icons.close,

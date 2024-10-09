@@ -1,4 +1,4 @@
-import 'package:daily_task_app/home_flow/add_edit_default_shedule.dart';
+import 'package:daily_task_app/setting_flow/add_edit_default_shedule.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {

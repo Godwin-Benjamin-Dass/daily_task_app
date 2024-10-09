@@ -1,5 +1,5 @@
 import 'package:daily_task_app/home_flow/add_task_popup.dart';
-import 'package:daily_task_app/home_flow/settings_page.dart';
+import 'package:daily_task_app/setting_flow/settings_page.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/widgets/task_tile_widget.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +148,45 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     TextButton(
                         onPressed: () {
-                          task.copyDefalutTask(date: date);
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text("Select type"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              task
+                                                  .copyDefalutTask(
+                                                      date: date,
+                                                      type: 'Week-day')
+                                                  .then((val) {
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: const Text('Week Day')),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              task
+                                                  .copyDefalutTask(
+                                                      date: date,
+                                                      type: 'Week-end')
+                                                  .then((val) {
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: const Text('Week End'))
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Close'))
+                                    ],
+                                  ));
                         },
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
