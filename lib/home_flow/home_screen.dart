@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 130),
+          preferredSize: const Size(double.infinity, 135),
           child: Container(
             color: Theme.of(context).primaryColor,
             child: Padding(
@@ -45,9 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       children: [
                         const Text(
-                          'Daily Task/Activity',
+                          'Daily Activities',
                           style: TextStyle(
-                              fontWeight: FontWeight.w700, color: Colors.white),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20,
+                              color: Colors.white),
                         ),
                         const Spacer(),
                         IconButton(
@@ -79,13 +81,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white),
+                                border: Border.all(
+                                    width: 0.2, color: Colors.white54),
                                 borderRadius: BorderRadius.circular(8)),
                             child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text(
-                                f.format(date),
-                                style: const TextStyle(color: Colors.white),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 3),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    date.year == DateTime.now().year &&
+                                            date.month ==
+                                                DateTime.now().month &&
+                                            date.day == DateTime.now().day
+                                        ? 'Today'
+                                        : f.format(date),
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 15),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down_rounded,
+                                    color: Colors.white54,
+                                  )
+                                ],
                               ),
                             ),
                           ),
