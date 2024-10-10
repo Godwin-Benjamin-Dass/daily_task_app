@@ -40,7 +40,8 @@ class TaskProvider extends ChangeNotifier {
           startTime: task.startTime,
           icon: task.icon,
           link: task.link,
-          status: task.status);
+          status: task.status,
+          app: task.app);
       _dailyTask.add(taskToBeAdded);
 
       addOrEditAllTask(taskToBeAdded);
@@ -185,7 +186,8 @@ class TaskProvider extends ChangeNotifier {
           startTime: task.startTime,
           icon: task.icon,
           link: task.link,
-          status: task.status);
+          status: task.status,
+          app: task.app);
       _deafultTask.add(taskToBeAdded);
     }
     _deafultTask.sort((a, b) {

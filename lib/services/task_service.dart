@@ -37,7 +37,10 @@ class TaskService {
           endTime TEXT,
           category TEXT,
           link TEXT,
-          status TEXT
+          status TEXT,
+          app_name TEXT,
+          app_icon BLOB,
+          bundle_id TEXT
         )
         ''',
         );

@@ -1,3 +1,4 @@
+import 'package:daily_task_app/models/app_model.dart';
 import 'package:device_installed_apps/app_info.dart';
 import 'package:device_installed_apps/device_installed_apps.dart';
 
@@ -56,15 +57,15 @@ class _DeviceAppScreenState extends State<DeviceAppScreen> {
     // DeviceInstalledApps.openAppSetting('com.hofinity');
   }
 
-  void _openApp(String packageName) async {
-    bool? isOpened = await DeviceInstalledApps.launchApp(packageName);
-    if (!isOpened!) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to open app $packageName')),
-      );
-    }
-  }
+  // void _openApp(String packageName) async {
+  //   bool? isOpened = await DeviceInstalledApps.launchApp(packageName);
+  //   if (!isOpened!) {
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Unable to open app $packageName')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +97,16 @@ class _DeviceAppScreenState extends State<DeviceAppScreen> {
                   : null,
               title: Text(app.name ?? 'Unknown'),
               subtitle: Text(app.bundleId ?? 'Unknown package'),
-              onTap: () => _openApp(app.bundleId!), // Open the app on tap
+              onTap: () {
+                Navigator.pop(
+                    context,
+                    AppModel(
+                      icon: app.icon,
+                      name: app.name,
+                      bundleId: app.bundleId,
+                    ));
+                // _openApp(app.bundleId!);
+              }, // Open the app on tap
             );
           },
         ),

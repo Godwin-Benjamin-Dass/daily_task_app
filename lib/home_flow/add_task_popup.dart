@@ -1,4 +1,5 @@
 import 'package:daily_task_app/home_flow/device_app_screen.dart';
+import 'package:daily_task_app/models/app_model.dart';
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/static_data.dart';
@@ -42,6 +43,7 @@ addTaskDialog(BuildContext context,
       TextEditingController(text: isEdit ? task!.link : null);
   TextEditingController desController =
       TextEditingController(text: isEdit ? task!.description : null);
+  AppModel? app = isEdit ? task!.app : null;
 
   // set up the button
 
@@ -316,13 +318,22 @@ addTaskDialog(BuildContext context,
                   height: 10,
                 ),
                 TextButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      AppModel? appData = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const DeviceAppScreen()));
+                      if (appData != null) {
+                        app = appData;
+                        setState(() {});
+                      }
                     },
-                    child: const Text('Add apps')),
+                    child: Text(app == null ? 'Add app' : 'Edit app')),
+                if (app != null)
+                  ListTile(
+                    leading: Image.memory(app!.icon!),
+                    title: Text(app!.name!),
+                  ),
                 if (isEdit)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

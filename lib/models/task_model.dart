@@ -1,3 +1,4 @@
+import 'package:daily_task_app/models/app_model.dart';
 import 'package:flutter/material.dart'; // for TimeOfDay
 
 class TaskModel {
@@ -11,6 +12,7 @@ class TaskModel {
   String? category;
   String? link;
   String? status;
+  AppModel? app;
 
   TaskModel({
     this.id,
@@ -23,6 +25,7 @@ class TaskModel {
     this.category,
     this.link,
     this.status,
+    this.app,
   });
 
   // Convert TaskModel to JSON
@@ -43,25 +46,26 @@ class TaskModel {
         'category': category,
         'link': link,
         'status': status,
+        'app': app?.toJson()
       };
 
   // Create TaskModel from JSON
   factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
-        id: json['id'] as String?,
-        task: json['task_name'] as String?,
-        description: json['description'] as String?,
-        icon: json['icon'] as String?,
-        date: json['date'] != null ? DateTime.tryParse(json['date']) : null,
-        startTime: json['startTime'] != null
-            ? TimeOfDay.fromDateTime(
-                DateTime.tryParse(json['startTime']) ?? DateTime.now())
-            : null,
-        endTime: json['endTime'] != null
-            ? TimeOfDay.fromDateTime(
-                DateTime.tryParse(json['endTime']) ?? DateTime.now())
-            : null,
-        category: json['category'] as String?,
-        link: json['link'] as String?,
-        status: json['status'] as String?,
-      );
+      id: json['id'] as String?,
+      task: json['task_name'] as String?,
+      description: json['description'] as String?,
+      icon: json['icon'] as String?,
+      date: json['date'] != null ? DateTime.tryParse(json['date']) : null,
+      startTime: json['startTime'] != null
+          ? TimeOfDay.fromDateTime(
+              DateTime.tryParse(json['startTime']) ?? DateTime.now())
+          : null,
+      endTime: json['endTime'] != null
+          ? TimeOfDay.fromDateTime(
+              DateTime.tryParse(json['endTime']) ?? DateTime.now())
+          : null,
+      category: json['category'] as String?,
+      link: json['link'] as String?,
+      status: json['status'] as String?,
+      app: AppModel.fromJson(json['app']));
 }

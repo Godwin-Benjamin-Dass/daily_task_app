@@ -115,6 +115,8 @@ class _EditProfileState extends State<EditProfile> {
                                 drivingLisence: drivingController.text.trim(),
                                 panNo: panController.text.trim()))
                         .then((val) {
+                      Provider.of<ProfileProvider>(context, listen: false)
+                          .getProfileDate();
                       if (widget.isCreate) {
                         Provider.of<ProfileProvider>(context, listen: false)
                             .setNew = false;
