@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 15),
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.arrow_drop_down_rounded,
                                     color: Colors.white54,
                                   )
@@ -208,57 +208,54 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ));
                         },
-                        child: Stack(children: [
-                          Image.asset(
-                            "assets/images/animationBG.png",
-                            height: 120,
-                            width: double.infinity,
-                            fit: BoxFit.fill,
+                        child: Container(
+                          height: 120,
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(
+                                    'assets/images/animationBG.png')),
                           ),
-                          Positioned(
-                            top: 50,
-                            left: MediaQuery.of(context).size.width * 0.16,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Copy Default Schedule',
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Icon(
-                                  Icons.copy,
-                                  color: Theme.of(context).primaryColor,
-                                )
-                              ],
-                            ),
-                          )
-                        ]),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Copy Default Schedule',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Icon(
+                                Icons.copy,
+                                color: Theme.of(context).primaryColor,
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: InkWell(
-                        onTap: () {
-                          addTaskDialog(date: date, context, isEdit: false);
-                        },
-                        child: Stack(children: [
-                          Image.asset(
-                            "assets/images/animationBG.png",
+                          onTap: () {
+                            addTaskDialog(date: date, context, isEdit: false);
+                          },
+                          child: Container(
                             height: 120,
                             width: double.infinity,
-                            fit: BoxFit.fill,
-                          ),
-                          Positioned(
-                            top: 50,
-                            left: MediaQuery.of(context).size.width * 0.15,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/images/animationBG.png')),
+                            ),
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'Create Your Own Schedule',
@@ -267,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 15,
                                 ),
                                 Icon(
@@ -276,9 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )
                               ],
                             ),
-                          )
-                        ]),
-                      ),
+                          )),
                     ),
                   ],
                 ),

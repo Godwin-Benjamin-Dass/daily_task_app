@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:daily_task_app/models/app_model.dart';
 import 'package:flutter/material.dart'; // for TimeOfDay
 
@@ -46,7 +48,7 @@ class TaskModel {
         'category': category,
         'link': link,
         'status': status,
-        'app': app?.toJson()
+        'app': jsonEncode(app?.toJson())
       };
 
   // Create TaskModel from JSON
@@ -67,5 +69,7 @@ class TaskModel {
       category: json['category'] as String?,
       link: json['link'] as String?,
       status: json['status'] as String?,
-      app: AppModel.fromJson(json['app']));
+      app: json['app'] != null
+          ? AppModel.fromJson(jsonDecode(json['app']))
+          : null);
 }

@@ -29,18 +29,16 @@ class TaskService {
           '''
         CREATE TABLE tasks (
           id TEXT PRIMARY KEY,
-          task_name TEXT,
-          description TEXT,
-          icon TEXT,
-          date TEXT,
-          startTime TEXT,
-          endTime TEXT,
-          category TEXT,
-          link TEXT,
-          status TEXT,
-          app_name TEXT,
-          app_icon BLOB,
-          bundle_id TEXT
+          task_name TEXT,          -- Task name
+          description TEXT,        -- Task description
+          icon TEXT,               -- Task icon as string
+          date TEXT,               -- Task date in ISO 8601 string format
+          startTime TEXT,          -- Start time in ISO 8601 string format
+          endTime TEXT,            -- End time in ISO 8601 string format
+          category TEXT,           -- Task category
+          link TEXT,               -- Link associated with the task
+          status TEXT,             -- Status of the task (e.g., complete, incomplete)
+          app TEXT                 -- Store AppModel as a JSON string
         )
         ''',
         );
@@ -49,11 +47,31 @@ class TaskService {
   }
 
   // Store a task in the database
-  static Future<void> addTask(TaskModel newTask) async {
+  static Future<void> addTask(TaskModel task) async {
     final db = await database;
     await db.insert(
       'tasks',
-      newTask.toJson(),
+      {
+        'id': task.id,
+        'task_name': task.task,
+        'description': task.description,
+        'icon': task.icon,
+        'date': task.date?.toIso8601String(),
+        'startTime': task.startTime != null
+            ? DateTime(2000, 1, 1, task.startTime!.hour, task.startTime!.minute)
+                .toIso8601String()
+            : null,
+        'endTime': task.endTime != null
+            ? DateTime(2000, 1, 1, task.endTime!.hour, task.endTime!.minute)
+                .toIso8601String()
+            : null,
+        'category': task.category,
+        'link': task.link,
+        'status': task.status,
+        'app': task.app != null
+            ? jsonEncode(task.app!.toJson())
+            : null, // Store AppModel as JSON string
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

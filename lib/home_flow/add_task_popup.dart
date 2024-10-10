@@ -83,13 +83,11 @@ addTaskDialog(BuildContext context,
                   category: category,
                   description: desController.text.trim(),
                   icon: selectedTaskIconName,
-                  status: 'incomplete'))
-              .then((val) {
-            if (val) {
-              Navigator.pop(context);
-            }
-            return;
-          });
+                  status: 'incomplete',
+                  app: app));
+          Navigator.pop(context);
+
+          return;
         }
         if (isEdit) {
           Provider.of<TaskProvider>(context, listen: false)
@@ -104,7 +102,8 @@ addTaskDialog(BuildContext context,
                       date: date,
                       description: desController.text.trim(),
                       icon: selectedTaskIconName,
-                      status: inComplete ?? inProgress ?? complete))
+                      status: inComplete ?? inProgress ?? complete,
+                      app: app))
               .then((val) {
             if (val) {
               Navigator.pop(context);
@@ -123,7 +122,8 @@ addTaskDialog(BuildContext context,
                       date: date,
                       description: desController.text.trim(),
                       icon: selectedTaskIconName,
-                      status: 'incomplete'))
+                      status: 'incomplete',
+                      app: app))
               .then((val) {
             if (val) {
               Navigator.pop(context);
@@ -192,7 +192,7 @@ addTaskDialog(BuildContext context,
                                       ? TimeOfDay.now().minute
                                       : startTime!.minute),
                               onChange: ((val) {}),
-                              minuteInterval: TimePickerInterval.FIVE,
+
                               // Optional onChange to receive value as DateTime
                               onChangeDateTime: (DateTime dateTime) {
                                 // print(dateTime);
@@ -234,7 +234,6 @@ addTaskDialog(BuildContext context,
                                       ? TimeOfDay.now().minute
                                       : endTime!.minute),
                               onChange: ((val) {}),
-                              minuteInterval: TimePickerInterval.FIVE,
                               // Optional onChange to receive value as DateTime
                               onChangeDateTime: (DateTime dateTime) {
                                 // print(dateTime);
@@ -330,9 +329,21 @@ addTaskDialog(BuildContext context,
                     },
                     child: Text(app == null ? 'Add app' : 'Edit app')),
                 if (app != null)
-                  ListTile(
-                    leading: Image.memory(app!.icon!),
-                    title: Text(app!.name!),
+                  Column(
+                    children: [
+                      const Divider(),
+                      ListTile(
+                        leading: Image.memory(height: 45, app!.icon!),
+                        title: Text(app!.name!),
+                        trailing: IconButton(
+                            onPressed: () {
+                              app = null;
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.close)),
+                      ),
+                      const Divider()
+                    ],
                   ),
                 if (isEdit)
                   Row(

@@ -13,6 +13,7 @@ class DeviceAppScreen extends StatefulWidget {
 
 class _DeviceAppScreenState extends State<DeviceAppScreen> {
   List<AppInfo> _apps = [];
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -30,6 +31,7 @@ class _DeviceAppScreenState extends State<DeviceAppScreen> {
       shouldHasAllPermissions: false,
     ).then((value) => {
           _apps = value,
+          isLoading = false,
           setState(() {}),
           // print("(DeviceInstalledApps) 1- ${value.length}"),
           // for (var i = 0; i < value.length; i++)
@@ -57,16 +59,6 @@ class _DeviceAppScreenState extends State<DeviceAppScreen> {
     // DeviceInstalledApps.openAppSetting('com.hofinity');
   }
 
-  // void _openApp(String packageName) async {
-  //   bool? isOpened = await DeviceInstalledApps.launchApp(packageName);
-  //   if (!isOpened!) {
-  //     // ignore: use_build_context_synchronously
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Unable to open app $packageName')),
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,29 +79,31 @@ class _DeviceAppScreenState extends State<DeviceAppScreen> {
         ),
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: _apps.length,
-          itemBuilder: (context, index) {
-            AppInfo app = _apps[index];
-            return ListTile(
-              leading: app.icon != null
-                  ? Image.memory(app.icon!, width: 40, height: 40)
-                  : null,
-              title: Text(app.name ?? 'Unknown'),
-              subtitle: Text(app.bundleId ?? 'Unknown package'),
-              onTap: () {
-                Navigator.pop(
-                    context,
-                    AppModel(
-                      icon: app.icon,
-                      name: app.name,
-                      bundleId: app.bundleId,
-                    ));
-                // _openApp(app.bundleId!);
-              }, // Open the app on tap
-            );
-          },
-        ),
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : ListView.builder(
+                itemCount: _apps.length,
+                itemBuilder: (context, index) {
+                  AppInfo app = _apps[index];
+                  return ListTile(
+                    leading: app.icon != null
+                        ? Image.memory(app.icon!, width: 40, height: 40)
+                        : null,
+                    title: Text(app.name ?? 'Unknown'),
+                    subtitle: Text(app.bundleId ?? 'Unknown package'),
+                    onTap: () {
+                      Navigator.pop(
+                          context,
+                          AppModel(
+                            icon: app.icon,
+                            name: app.name,
+                            bundleId: app.bundleId,
+                          ));
+                      // _openApp(app.bundleId!);
+                    }, // Open the app on tap
+                  );
+                },
+              ),
       ),
     );
   }

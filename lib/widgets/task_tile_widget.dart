@@ -1,6 +1,7 @@
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/static_data.dart';
+import 'package:device_installed_apps/device_installed_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,16 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
       caseSensitive: false,
     );
     return regex.hasMatch(url);
+  }
+
+  void _openApp(String packageName) async {
+    bool? isOpened = await DeviceInstalledApps.launchApp(packageName);
+    if (!isOpened!) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to open app $packageName')),
+      );
+    }
   }
 
   @override
@@ -104,7 +115,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               Row(
@@ -180,21 +191,25 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                           "${widget.task.link!}(click to launch url)",
                           style: const TextStyle(color: Colors.purple),
                         )),
-                    if (widget.task.category == 'Wealth')
+                    if (widget.task.app != null)
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Divider(),
-                          InkWell(
-                              onTap: () {
-                                launchUrl(Uri.parse(
-                                    'https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user&hl=en_IN'));
-                              },
-                              child: const Text(
-                                "Open Google Pay",
-                                style: TextStyle(color: Colors.purple),
-                              )),
+                          const Text(
+                            'Open app: ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 15),
+                          ),
+                          ListTile(
+                            onTap: () {
+                              _openApp(widget.task.app!.bundleId!);
+                            },
+                            leading: Image.memory(
+                                height: 45, widget.task.app!.icon!),
+                            title: Text(widget.task.app!.name!),
+                          ),
                         ],
-                      )
+                      ),
                   ],
                 ),
               Row(

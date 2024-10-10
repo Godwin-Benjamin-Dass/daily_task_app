@@ -26,7 +26,7 @@ class TaskProvider extends ChangeNotifier {
     _dailyTask.clear();
     List<TaskModel> tasks = await TaskService.getDefalutTasks(type: type);
     if (tasks.isEmpty) {
-      Fluttertoast.showToast(msg: 'Default Task is empty!,');
+      Fluttertoast.showToast(msg: 'Default Task is empty!');
       return;
     }
     for (var task in tasks) {
