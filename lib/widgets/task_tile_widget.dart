@@ -41,7 +41,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Theme.of(context).primaryColor),
+          border: Border.all(color: Theme.of(context).primaryColor, width: 0.5),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
@@ -52,32 +52,35 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
               Row(
                 children: [
                   Text(
-                    'SI No: ${widget.idx}',
+                    'Task: ${widget.idx}',
                     style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    width: 25,
+                    width: 20,
                   ),
-                  Icon(
-                    size: 40,
-                    getIcon(widget.task.category),
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  if (widget.task.icon != 'sleeping')
+                    Icon(
+                        size: 30,
+                        getIcon(widget.task.icon),
+                        color: Theme.of(context).primaryColor),
+                  if (widget.task.icon == 'sleeping')
+                    Image.asset("assets/images/sleeping_icon.png",
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        color: Theme.of(context).primaryColor),
                   const Spacer(),
                   if (!widget.isAnalyseTask)
-                    Container(
-                      decoration: const BoxDecoration(
-                          color: Colors.red, shape: BoxShape.circle),
-                      child: IconButton(
-                          onPressed: () {
-                            Provider.of<TaskProvider>(context, listen: false)
-                                .deleteTask(id: widget.task.id!);
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          )),
+                    IconButton(
+                      onPressed: () {
+                        Provider.of<TaskProvider>(context, listen: false)
+                            .deleteTask(id: widget.task.id!);
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
                     )
                 ],
               ),
@@ -87,28 +90,15 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * .5,
                     child: Text(
-                      'Task: ${widget.task.task}',
+                      'Activity: ${widget.task.task}',
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  if (widget.task.icon != 'sleeping')
-                    Icon(
-                      size: 30,
-                      getIcon(widget.task.icon),
-                      color: Colors.black,
-                    ),
-                  if (widget.task.icon == 'sleeping')
-                    Image.asset(
-                      "assets/images/sleeping_icon.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    )
                 ],
+              ),
+              SizedBox(
+                height: 12,
               ),
               Row(
                 children: [
@@ -203,35 +193,45 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
               Row(
                 children: [
                   const Text(
-                    'Status',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    'Status:  ',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                  Text(
+                    widget.task.status == 'incomplete'
+                        ? "Not Yet Started"
+                        : widget.task.status == 'pending'
+                            ? "In Progress"
+                            : "Completed",
+                    style: TextStyle(
                         color: widget.task.status == 'incomplete'
                             ? Colors.red
                             : widget.task.status == 'pending'
                                 ? Colors.yellow
                                 : Colors.green,
-                        border: Border.all()),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   if (!widget.isAnalyseTask)
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor),
-                        onPressed: widget.ontap,
-                        child: const Text(
-                          'Update',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ))
+                    Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: SizedBox(
+                        height: 34,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              backgroundColor: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: widget.ontap,
+                            child: const Text(
+                              'Update',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )),
+                      ),
+                    )
                 ],
               ),
             ],
