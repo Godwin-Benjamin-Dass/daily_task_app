@@ -33,15 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 135),
+          preferredSize: const Size(double.infinity, 70),
           child: Container(
             color: Theme.of(context).primaryColor,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 30),
+                    padding: const EdgeInsets.only(top: 20),
                     child: Row(
                       children: [
                         const Text(
@@ -111,49 +111,49 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            size: 40,
-                            Icons.health_and_safety,
-                            color: Colors.white,
-                          )),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            size: 40,
-                            Icons.school,
-                            color: Colors.white,
-                          )),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            size: 40,
-                            Icons.currency_rupee,
-                            color: Colors.white,
-                          )),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            size: 40,
-                            Icons.mood,
-                            color: Colors.white,
-                          )),
-                      IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            "assets/images/sleeping_icon.png",
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                            color: Colors.white,
-                          ))
-                    ],
-                  )
+                  // const Spacer(),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     IconButton(
+                  //         onPressed: () {},
+                  //         icon: const Icon(
+                  //           size: 40,
+                  //           Icons.health_and_safety,
+                  //           color: Colors.white,
+                  //         )),
+                  //     IconButton(
+                  //         onPressed: () {},
+                  //         icon: const Icon(
+                  //           size: 40,
+                  //           Icons.school,
+                  //           color: Colors.white,
+                  //         )),
+                  //     IconButton(
+                  //         onPressed: () {},
+                  //         icon: const Icon(
+                  //           size: 40,
+                  //           Icons.currency_rupee,
+                  //           color: Colors.white,
+                  //         )),
+                  //     IconButton(
+                  //         onPressed: () {},
+                  //         icon: const Icon(
+                  //           size: 40,
+                  //           Icons.mood,
+                  //           color: Colors.white,
+                  //         )),
+                  //     IconButton(
+                  //         onPressed: () {},
+                  //         icon: Image.asset(
+                  //           "assets/images/sleeping_icon.png",
+                  //           width: 50,
+                  //           height: 50,
+                  //           fit: BoxFit.cover,
+                  //           color: Colors.white,
+                  //         ))
+                  //   ],
+                  // )
                 ],
               ),
             ),
@@ -164,8 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                        onPressed: () {
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: InkWell(
+                        onTap: () {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -206,33 +208,78 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ));
                         },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Copy Default Shedule'),
-                            SizedBox(
-                              width: 20,
+                        child: Stack(children: [
+                          Image.asset(
+                            "assets/images/animationBG.png",
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.fill,
+                          ),
+                          Positioned(
+                            top: 50,
+                            left: MediaQuery.of(context).size.width * 0.16,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Copy Default Schedule',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Icon(
+                                  Icons.copy,
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              ],
                             ),
-                            Icon(Icons.copy)
-                          ],
-                        )),
-                    const SizedBox(
-                      height: 20,
+                          )
+                        ]),
+                      ),
                     ),
-                    TextButton(
-                        onPressed: () {
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: InkWell(
+                        onTap: () {
                           addTaskDialog(date: date, context, isEdit: false);
                         },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Create Your Own Shedule'),
-                            SizedBox(
-                              width: 20,
+                        child: Stack(children: [
+                          Image.asset(
+                            "assets/images/animationBG.png",
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.fill,
+                          ),
+                          Positioned(
+                            top: 50,
+                            left: MediaQuery.of(context).size.width * 0.15,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Create Your Own Schedule',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Icon(
+                                  Icons.add_alert_outlined,
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              ],
                             ),
-                            Icon(Icons.add)
-                          ],
-                        )),
+                          )
+                        ]),
+                      ),
+                    ),
                   ],
                 ),
               )
