@@ -8,9 +8,13 @@ import 'package:provider/provider.dart';
 
 class AnalyzerScreen extends StatefulWidget {
   const AnalyzerScreen(
-      {super.key, required this.startDate, required this.endDate});
+      {super.key,
+      required this.startDate,
+      required this.endDate,
+      this.isParticularDay = false});
   final DateTime startDate;
   final DateTime endDate;
+  final bool isParticularDay;
 
   @override
   State<AnalyzerScreen> createState() => _AnalyzerScreenState();
@@ -76,10 +80,12 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    const Text(
-                      'Select range: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    Text(
+                      widget.isParticularDay
+                          ? 'Selected Date: '
+                          : 'Start Range: ',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     const SizedBox(
                       width: 10,
@@ -92,23 +98,24 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    const Text(
-                      'End date: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      DateFormat("dd, MMM, yy").format(widget.endDate),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
+                if (!widget.isParticularDay)
+                  Row(
+                    children: [
+                      const Text(
+                        'End Date: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        DateFormat("dd, MMM, yy").format(widget.endDate),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
+                    ],
+                  ),
                 const SizedBox(
                   height: 15,
                 ),

@@ -7,6 +7,25 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+void openApp(String packageName, context) async {
+  bool? isOpened = await DeviceInstalledApps.launchApp(packageName);
+  if (!isOpened!) {
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Unable to open app $packageName')),
+    );
+  }
+}
+
+bool isValidURL(String url) {
+  // Basic regex for URL validation
+  final regex = RegExp(
+    r'^(http|https):\/\/[^\s/$.?#].[^\s]*$',
+    caseSensitive: false,
+  );
+  return regex.hasMatch(url);
+}
+
 class TaskTileWidget extends StatefulWidget {
   const TaskTileWidget({
     super.key,
@@ -15,12 +34,14 @@ class TaskTileWidget extends StatefulWidget {
     required this.idx,
     this.isAnalyseTask = false,
     this.isDefault = false,
+    this.isNotificationPopUp = false,
   });
   final Function() ontap;
   final TaskModel task;
   final int idx;
   final bool isAnalyseTask;
   final bool isDefault;
+  final bool isNotificationPopUp;
 
   @override
   State<TaskTileWidget> createState() => _TaskTileWidgetState();
@@ -28,24 +49,6 @@ class TaskTileWidget extends StatefulWidget {
 
 class _TaskTileWidgetState extends State<TaskTileWidget> {
   bool view = false;
-  bool isValidURL(String url) {
-    // Basic regex for URL validation
-    final regex = RegExp(
-      r'^(http|https):\/\/[^\s/$.?#].[^\s]*$',
-      caseSensitive: false,
-    );
-    return regex.hasMatch(url);
-  }
-
-  void _openApp(String packageName) async {
-    bool? isOpened = await DeviceInstalledApps.launchApp(packageName);
-    if (!isOpened!) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to open app $packageName')),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +63,21 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(
-                    'Task: ${widget.idx}',
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
+                  if (widget.isNotificationPopUp == false)
+                    Text(
+                      'Task: ${widget.idx}',
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  if (widget.isNotificationPopUp == false)
+                    const SizedBox(
+                      width: 20,
+                    ),
                   if (widget.task.icon != 'sleeping')
                     Icon(
                         size: 30,
@@ -133,6 +139,12 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                         style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
+                      if (widget.isNotificationPopUp == true)
+                        Text(
+                          'Duration: ${calculateDuration(widget.task.startTime!, widget.task.endTime!)}',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
                       if (widget.isAnalyseTask)
                         Text(
                           'Date: ${DateFormat("dd, MMM, yy").format(widget.task.date!)}',
@@ -144,11 +156,12 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   const SizedBox(
                     width: 15,
                   ),
-                  Text(
-                    ' Duration: ${calculateDuration(widget.task.startTime!, widget.task.endTime!)}',
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
+                  if (widget.isNotificationPopUp == false)
+                    Text(
+                      ' Duration: ${calculateDuration(widget.task.startTime!, widget.task.endTime!)}',
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
                   IconButton(
                       onPressed: () {
                         view = !view;
@@ -202,7 +215,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                           ),
                           ListTile(
                             onTap: () {
-                              _openApp(widget.task.app!.bundleId!);
+                              openApp(widget.task.app!.bundleId!, context);
                             },
                             leading: Image.memory(
                                 height: 45, widget.task.app!.icon!),
@@ -256,6 +269,46 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                     )
                 ],
               ),
+              if (widget.isNotificationPopUp)
+                Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (widget.task.status == 'incomplete') {
+                            Provider.of<TaskProvider>(context, listen: false)
+                                .editTask(
+                                    task: TaskModel(
+                                        date: widget.task.date,
+                                        id: widget.task.id,
+                                        task: widget.task.task,
+                                        link: widget.task.link,
+                                        startTime: widget.task.startTime,
+                                        endTime: widget.task.endTime,
+                                        category: widget.task.category,
+                                        description: widget.task.description,
+                                        icon: widget.task.icon,
+                                        status: 'pending',
+                                        app: widget.task.app));
+                          } else {
+                            Provider.of<TaskProvider>(context, listen: false)
+                                .editTask(
+                                    task: TaskModel(
+                                        date: widget.task.date,
+                                        id: widget.task.id,
+                                        task: widget.task.task,
+                                        link: widget.task.link,
+                                        startTime: widget.task.startTime,
+                                        endTime: widget.task.endTime,
+                                        category: widget.task.category,
+                                        description: widget.task.description,
+                                        icon: widget.task.icon,
+                                        status: 'completed',
+                                        app: widget.task.app));
+                          }
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(widget.task.status == 'incomplete'
+                            ? 'Start Task'
+                            : 'Complete task')))
             ],
           ),
         ),

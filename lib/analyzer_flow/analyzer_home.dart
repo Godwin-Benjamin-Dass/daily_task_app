@@ -13,6 +13,8 @@ class AnalyzerHome extends StatefulWidget {
 class _AnalyzerHomeState extends State<AnalyzerHome> {
   DateTime? startDate;
   DateTime? endDate;
+  DateTime? particularDate;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +29,69 @@ class _AnalyzerHomeState extends State<AnalyzerHome> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const Text(
+                  'Select date: ',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      DateTime? date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1991),
+                          lastDate: DateTime(2100));
+                      if (date != null) {
+                        particularDate = date;
+                        setState(() {});
+                      }
+                    },
+                    child: const Text("Select date")),
+              ],
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              particularDate != null
+                  ? DateFormat("dd, MMM").format(particularDate!)
+                  : '-',
+              style: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (particularDate == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Please select a date')));
+                      return;
+                    }
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AnalyzerScreen(
+                                  isParticularDay: true,
+                                  startDate: particularDate!
+                                      .subtract(const Duration(days: 1)),
+                                  endDate: particularDate!
+                                      .add(const Duration(days: 1)),
+                                )));
+                  },
+                  child: const Text('Analyse particullar day')),
+            ),
             const SizedBox(height: 20),
             Row(
               children: [
@@ -101,7 +166,7 @@ class _AnalyzerHomeState extends State<AnalyzerHome> {
                                   endDate: endDate!,
                                 )));
                   },
-                  child: const Text('Analyse')),
+                  child: const Text('Analyse Range')),
             )
           ],
         ),

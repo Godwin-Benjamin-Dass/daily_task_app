@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:daily_task_app/models/task_model.dart';
+import 'package:daily_task_app/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -74,6 +75,21 @@ class TaskService {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    DateTime sheduleTime = DateTime(
+      task.date!.year,
+      task.date!.month,
+      task.date!.day,
+      task.startTime!.hour,
+      task.startTime!.minute,
+    );
+    if (sheduleTime.isBefore(DateTime.now())) {
+      return;
+    }
+    NotificationService.scheduleNotification(
+        title: task.task!,
+        payload: task.id!,
+        scheduledTime: sheduleTime,
+        id: DateTime.parse(task.id!).microsecond);
   }
 
   // Retrieve all tasks from the database
@@ -95,6 +111,32 @@ class TaskService {
       where: 'id = ?',
       whereArgs: [updatedTask.id],
     );
+    if (updatedTask.status == 'completed') {
+      NotificationService.cancelNotification(
+          DateTime.parse(updatedTask.id!).microsecond);
+      return;
+    }
+    DateTime sheduleTime = DateTime(
+      updatedTask.date!.year,
+      updatedTask.date!.month,
+      updatedTask.date!.day,
+      updatedTask.status == 'pending'
+          ? updatedTask.endTime!.hour
+          : updatedTask.startTime!.hour,
+      updatedTask.status == 'pending'
+          ? updatedTask.endTime!.minute
+          : updatedTask.startTime!.minute,
+    );
+    NotificationService.cancelNotification(
+        DateTime.parse(updatedTask.id!).microsecond);
+    if (sheduleTime.isBefore(DateTime.now())) {
+      return;
+    }
+    NotificationService.scheduleNotification(
+        title: updatedTask.task!,
+        payload: updatedTask.id!,
+        scheduledTime: sheduleTime,
+        id: DateTime.parse(updatedTask.id!).microsecond);
   }
 
   // Delete a specific task
@@ -105,6 +147,26 @@ class TaskService {
       where: 'id = ?',
       whereArgs: [taskId],
     );
+    NotificationService.cancelNotification(DateTime.parse(taskId).microsecond);
+  }
+
+  static Future<TaskModel?> getTaskById(String id) async {
+    final Database db = await _initDatabase(); // Initialize the database
+
+    // Query the database for the task with the given id
+    final List<Map<String, dynamic>> maps = await db.query(
+      'tasks',
+      where: 'id = ?', // Filter by the task id
+      whereArgs: [id], // Pass the id as an argument
+    );
+
+    // If the task is found, return a TaskModel instance
+    if (maps.isNotEmpty) {
+      return TaskModel.fromJson(
+          maps.first); // Create a TaskModel from the first result
+    } else {
+      return null; // Return null if no task is found
+    }
   }
 
   static Future saveDefaultTask(

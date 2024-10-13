@@ -1,4 +1,5 @@
 import 'package:daily_task_app/home_flow/add_task_popup.dart';
+import 'package:daily_task_app/services/task_service.dart';
 import 'package:daily_task_app/setting_flow/settings_page.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/widgets/task_tile_widget.dart';
@@ -25,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // ignore: use_build_context_synchronously
     await Provider.of<TaskProvider>(context, listen: false)
         .getTaskForParticularDay(date: DateTime.now());
+    // ignore: use_build_context_synchronously
+    // NotificationService().initNotification(context);
   }
 
   final f = DateFormat('yyyy-MM-dd');
@@ -293,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () {
+          onPressed: () async {
             addTaskDialog(context, isEdit: false, date: date);
           }),
     );
