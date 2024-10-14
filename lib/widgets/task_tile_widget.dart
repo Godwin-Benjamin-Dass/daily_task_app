@@ -81,7 +81,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   if (widget.task.icon != 'sleeping')
                     Icon(
                         size: 30,
-                        getIcon(widget.task.icon),
+                        getIcon(widget.task.icon!),
                         color: Theme.of(context).primaryColor),
                   if (widget.task.icon == 'sleeping')
                     Image.asset("assets/images/sleeping_icon.png",

@@ -247,10 +247,17 @@ final List<Map<String, IconData>> taskIcons = [
   {'Cleaning': Icons.cleaning_services},
   {'Reading': Icons.book},
   {'Meeting': Icons.meeting_room},
-  {'sleeping': Icons.hotel},
+  {'Sleeping': Icons.hotel},
+  {'Business': Icons.business},
+  {'Self Care': Icons.self_improvement},
+  {'Travel': Icons.travel_explore},
+  {'Medicine': Icons.medication},
+  {'Study Time': Icons.school},
+  {'Playing': Icons.sports_soccer},
+  {'Entertainment': Icons.movie},
 ];
 
-getIcon(icon) {
+getIcon(String icon) {
   switch (icon) {
     case 'Wealth':
       return Icons.currency_rupee;
@@ -272,7 +279,23 @@ getIcon(icon) {
       return Icons.book;
     case 'Meeting':
       return Icons.meeting_room;
-    case 'sleeping':
+    case 'Sleeping':
       return Icons.hotel;
+    case 'Business':
+      return Icons.business;
+    case 'Self Care':
+      return Icons.self_improvement;
+    case 'Travel':
+      return Icons.travel_explore;
+    case 'Medicine':
+      return Icons.medication;
+    case 'Study Time':
+      return Icons.school;
+    case 'Playing':
+      return Icons.sports_soccer;
+    case 'Entertainment':
+      return Icons.movie;
+    default:
+      return Icons.help; // Fallback icon in case no match is found
   }
 }

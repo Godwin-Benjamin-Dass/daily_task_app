@@ -1,5 +1,4 @@
 import 'package:daily_task_app/home_flow/add_task_popup.dart';
-import 'package:daily_task_app/services/task_service.dart';
 import 'package:daily_task_app/setting_flow/settings_page.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/widgets/task_tile_widget.dart';
@@ -35,132 +34,174 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 70),
-          child: Container(
-            color: Theme.of(context).primaryColor,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+          'Daily Activities',
+          style: TextStyle(
+              fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SettingsPage()));
+              },
+              icon: const Icon(
+                Icons.settings,
+                color: Colors.white,
+              )),
+          InkWell(
+            onTap: () async {
+              final DateTime? picked = await showDatePicker(
+                  currentDate: date,
+                  context: context,
+                  firstDate: DateTime(1999),
+                  lastDate: DateTime(2100));
+              if (picked != null) {
+                date = picked;
+                setState(() {});
+                // ignore: use_build_context_synchronously
+                Provider.of<TaskProvider>(context, listen: false)
+                    .getTaskForParticularDay(date: date);
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.2, color: Colors.white54),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                child: Row(
+                  children: [
+                    Text(
+                      date.year == DateTime.now().year &&
+                              date.month == DateTime.now().month &&
+                              date.day == DateTime.now().day
+                          ? 'Today'
+                          : f.format(date),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    const Icon(
+                      Icons.arrow_drop_down_rounded,
+                      color: Colors.white54,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          )
+        ],
+        bottom: PreferredSize(
+            preferredSize: const Size(double.infinity, 70),
+            child: Expanded(
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).primaryColor),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Text(
-                          'Daily Activities',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                              color: Colors.white),
-                        ),
-                        const Spacer(),
                         IconButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SettingsPage()));
+                              showCountPopup(context,
+                                  title: 'Health',
+                                  count: Provider.of<TaskProvider>(context,
+                                          listen: false)
+                                      .dailyTask
+                                      .where((ele) => ele.category == 'Health')
+                                      .toList()
+                                      .length);
                             },
                             icon: const Icon(
-                              Icons.settings,
+                              size: 30,
+                              Icons.health_and_safety,
                               color: Colors.white,
                             )),
-                        InkWell(
-                          onTap: () async {
-                            final DateTime? picked = await showDatePicker(
-                                currentDate: date,
-                                context: context,
-                                firstDate: DateTime(1999),
-                                lastDate: DateTime(2100));
-                            if (picked != null) {
-                              date = picked;
-                              setState(() {});
-                              // ignore: use_build_context_synchronously
-                              Provider.of<TaskProvider>(context, listen: false)
-                                  .getTaskForParticularDay(date: date);
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 0.2, color: Colors.white54),
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 3),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    date.year == DateTime.now().year &&
-                                            date.month ==
-                                                DateTime.now().month &&
-                                            date.day == DateTime.now().day
-                                        ? 'Today'
-                                        : f.format(date),
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 15),
-                                  ),
-                                  const Icon(
-                                    Icons.arrow_drop_down_rounded,
-                                    color: Colors.white54,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
+                        IconButton(
+                            onPressed: () {
+                              showCountPopup(context,
+                                  title: 'Studies',
+                                  count: Provider.of<TaskProvider>(context,
+                                          listen: false)
+                                      .dailyTask
+                                      .where((ele) => ele.category == 'Studies')
+                                      .toList()
+                                      .length);
+                            },
+                            icon: const Icon(
+                              size: 30,
+                              Icons.school,
+                              color: Colors.white,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              showCountPopup(context,
+                                  title: 'Money',
+                                  count: Provider.of<TaskProvider>(context,
+                                          listen: false)
+                                      .dailyTask
+                                      .where((ele) => ele.category == 'Money')
+                                      .toList()
+                                      .length);
+                            },
+                            icon: const Icon(
+                              size: 30,
+                              Icons.currency_rupee,
+                              color: Colors.white,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              showCountPopup(context,
+                                  title: 'Enjoyment',
+                                  count: Provider.of<TaskProvider>(context,
+                                          listen: false)
+                                      .dailyTask
+                                      .where(
+                                          (ele) => ele.category == 'Enjoyment')
+                                      .toList()
+                                      .length);
+                            },
+                            icon: const Icon(
+                              size: 30,
+                              Icons.mood,
+                              color: Colors.white,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              showCountPopup(context,
+                                  title: 'Sleep',
+                                  count: Provider.of<TaskProvider>(context,
+                                          listen: false)
+                                      .dailyTask
+                                      .where((ele) => ele.category == 'Sleep')
+                                      .toList()
+                                      .length);
+                            },
+                            icon: Image.asset(
+                              "assets/images/sleeping_icon.png",
+                              width: 35,
+                              height: 35,
+                              fit: BoxFit.cover,
+                              color: Colors.white,
+                            ))
                       ],
                     ),
                   ),
-                  // const Spacer(),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     IconButton(
-                  //         onPressed: () {},
-                  //         icon: const Icon(
-                  //           size: 40,
-                  //           Icons.health_and_safety,
-                  //           color: Colors.white,
-                  //         )),
-                  //     IconButton(
-                  //         onPressed: () {},
-                  //         icon: const Icon(
-                  //           size: 40,
-                  //           Icons.school,
-                  //           color: Colors.white,
-                  //         )),
-                  //     IconButton(
-                  //         onPressed: () {},
-                  //         icon: const Icon(
-                  //           size: 40,
-                  //           Icons.currency_rupee,
-                  //           color: Colors.white,
-                  //         )),
-                  //     IconButton(
-                  //         onPressed: () {},
-                  //         icon: const Icon(
-                  //           size: 40,
-                  //           Icons.mood,
-                  //           color: Colors.white,
-                  //         )),
-                  //     IconButton(
-                  //         onPressed: () {},
-                  //         icon: Image.asset(
-                  //           "assets/images/sleeping_icon.png",
-                  //           width: 50,
-                  //           height: 50,
-                  //           fit: BoxFit.cover,
-                  //           color: Colors.white,
-                  //         ))
-                  //   ],
-                  // )
-                ],
+                ),
               ),
-            ),
-          )),
+            )),
+      ),
       body: Consumer<TaskProvider>(
         builder: (context, task, child) => task.dailyTask.isEmpty
             ? Center(
@@ -299,6 +340,16 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async {
             addTaskDialog(context, isEdit: false, date: date);
           }),
+    );
+  }
+
+  showCountPopup(context, {required String title, required int count}) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text('No of task: $count'),
+      ),
     );
   }
 }

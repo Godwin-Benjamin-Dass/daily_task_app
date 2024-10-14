@@ -36,7 +36,7 @@ addTaskDialog(BuildContext context,
   TimeOfDay? startTime = isEdit ? task!.startTime : null;
   TimeOfDay? endTime = isEdit ? task!.endTime : null;
   String category = isEdit ? task!.category! : 'Health';
-  String selectedTaskIconName = isEdit ? task!.icon! : 'Health';
+  String selectedTaskIconName = isEdit ? task!.icon! : 'Work';
   TextEditingController taskController =
       TextEditingController(text: isEdit ? task!.task : null);
   TextEditingController linkController =
