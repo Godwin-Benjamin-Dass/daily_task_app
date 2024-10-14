@@ -48,7 +48,7 @@ class TaskModel {
         'category': category,
         'link': link,
         'status': status,
-        'app': jsonEncode(app?.toJson())
+        'app': app == null ? null : jsonEncode(app!.toJson())
       };
 
   // Create TaskModel from JSON
@@ -69,7 +69,7 @@ class TaskModel {
       category: json['category'] as String?,
       link: json['link'] as String?,
       status: json['status'] as String?,
-      app: json['app'] != null
-          ? AppModel.fromJson(jsonDecode(json['app']))
-          : null);
+      app: jsonDecode(json['app'] ?? 'null') == null
+          ? null
+          : AppModel.fromJson(jsonDecode(json['app'])));
 }

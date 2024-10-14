@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,6 +190,7 @@ class TaskService {
     final List maps = jsonDecode(data);
 
     return List.generate(maps.length, (i) {
+      log(maps[i].toString());
       return TaskModel.fromJson(maps[i]);
     });
   }

@@ -91,7 +91,9 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                       width: 10,
                     ),
                     Text(
-                      DateFormat("dd, MMM, yy").format(widget.startDate),
+                      DateFormat("dd, MMM, yy").format(widget.isParticularDay
+                          ? widget.startDate.add(const Duration(days: 1))
+                          : widget.startDate),
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 16),
                     ),

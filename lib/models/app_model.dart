@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 class AppModel {
@@ -20,6 +21,7 @@ class AppModel {
 
   // Create AppModel object from JSON
   factory AppModel.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
     return AppModel(
       name: json['name'],
       icon: json['icon'] != null
