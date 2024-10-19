@@ -345,11 +345,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
   showCountPopup(context, {required String title, required int count}) {
     return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text('No of task: $count'),
-      ),
-    );
+        context: context,
+        builder: (context) => Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: SizedBox(
+                  height: 90,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800, fontSize: 18),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        child: Row(
+                          children: [
+                            Text(
+                              "No of task: ",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w400),
+                            ),
+                            Text(
+                              count.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 16),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            ));
   }
 }

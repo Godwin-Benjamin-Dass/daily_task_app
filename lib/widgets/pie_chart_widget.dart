@@ -22,8 +22,14 @@ class PieChartWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$type: ',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          '$type :',
+          style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              decoration: TextDecoration.underline),
+        ),
+        SizedBox(
+          height: 8,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -57,7 +63,7 @@ class PieChartWidget extends StatelessWidget {
                   size: 130,
                 ),
               const SizedBox(
-                width: 15,
+                width: 25,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -66,12 +72,13 @@ class PieChartWidget extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
-                        'Pending: ',
+                        'Pending - ',
                         style: TextStyle(fontSize: 16, color: Colors.red),
                       ),
                       Text(
                         pending.toString(),
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
@@ -81,12 +88,13 @@ class PieChartWidget extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
-                        'In progress: ',
-                        style: TextStyle(fontSize: 16, color: Colors.yellow),
+                        'In Progress - ',
+                        style: TextStyle(fontSize: 16, color: Colors.amber),
                       ),
                       Text(
                         inProgress.toString(),
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
@@ -96,12 +104,13 @@ class PieChartWidget extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
-                        'Completed: ',
+                        'Completed - ',
                         style: TextStyle(fontSize: 16, color: Colors.green),
                       ),
                       Text(
                         completed.toString(),
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
@@ -110,9 +119,21 @@ class PieChartWidget extends StatelessWidget {
             ],
           ),
         ),
-        Center(
-            child: ElevatedButton(
-                onPressed: ontap, child: const Text('View Tasks')))
+        pending > 0 || inProgress > 0 || completed > 0
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: ontap,
+                      child: Text(
+                        'View Tasks >>',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w700),
+                      )),
+                ],
+              )
+            : SizedBox()
       ],
     );
   }

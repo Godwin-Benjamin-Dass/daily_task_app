@@ -34,7 +34,8 @@ class NotificationService {
         InitializationSettings(android: androidInitializationSettings);
 
     await _localNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
+        onDidReceiveNotificationResponse: (details) =>
+            onSelectNotification(details.payload));
 
     // Request permission after initialization
     await _requestPermissions();

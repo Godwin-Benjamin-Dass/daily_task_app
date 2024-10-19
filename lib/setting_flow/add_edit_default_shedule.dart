@@ -34,21 +34,39 @@ class _AddEditDefaultSheduleState extends State<AddEditDefaultShedule> {
         await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: const Text('Do you want to save the tasks'),
+                  title: const Text(
+                    'Do you want to save the tasks ?',
+                    style: TextStyle(fontSize: 18),
+                  ),
                   actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('No')),
-                    TextButton(
-                        onPressed: () {
-                          Provider.of<TaskProvider>(context, listen: false)
-                              .saveDefaultTask(type: widget.sheduleType);
+                    SizedBox(
+                        height: 34,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'))),
+                    SizedBox(
+                        height: 34,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                                backgroundColor:
+                                    Theme.of(context).primaryColor),
+                            onPressed: () {
+                              Provider.of<TaskProvider>(context, listen: false)
+                                  .saveDefaultTask(type: widget.sheduleType);
 
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Yes')),
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Yes',
+                              style: TextStyle(color: Colors.white),
+                            ))),
                   ],
                 ));
         return true;
@@ -61,25 +79,45 @@ class _AddEditDefaultSheduleState extends State<AddEditDefaultShedule> {
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                          title: const Text('Do you want to save the tasks'),
+                          title: const Text(
+                            'Do you want to save the tasks ?',
+                            style: TextStyle(fontSize: 18),
+                          ),
                           actions: [
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('No')),
-                            TextButton(
-                                onPressed: () {
-                                  Provider.of<TaskProvider>(context,
-                                          listen: false)
-                                      .saveDefaultTask(
-                                          type: widget.sheduleType);
+                            SizedBox(
+                                height: 34,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8))),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('No'))),
+                            SizedBox(
+                                height: 34,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor),
+                                    onPressed: () {
+                                      Provider.of<TaskProvider>(context,
+                                              listen: false)
+                                          .saveDefaultTask(
+                                              type: widget.sheduleType);
 
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Yes')),
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Yes',
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
                           ],
                         ));
               },
@@ -90,7 +128,7 @@ class _AddEditDefaultSheduleState extends State<AddEditDefaultShedule> {
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
             '${widget.sheduleType} Schedule',
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         body: Consumer<TaskProvider>(
@@ -115,17 +153,44 @@ class _AddEditDefaultSheduleState extends State<AddEditDefaultShedule> {
                                 defaultType: widget.sheduleType);
                           });
                     }),
-                ElevatedButton(
-                    onPressed: () {
-                      Provider.of<TaskProvider>(context, listen: false)
-                          .saveDefaultTask(type: widget.sheduleType)
-                          .then((val) {
-                        if (val) {
-                          Navigator.pop(context);
-                        }
-                      });
-                    },
-                    child: const Text('Save'))
+                task.deafultTask.length > 0
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: SizedBox(
+                          height: 34,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                              ),
+                              onPressed: () {
+                                Provider.of<TaskProvider>(context,
+                                        listen: false)
+                                    .saveDefaultTask(type: widget.sheduleType)
+                                    .then((val) {
+                                  if (val) {
+                                    Navigator.pop(context);
+                                  }
+                                });
+                              },
+                              child: const Text(
+                                'Save',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white),
+                              )),
+                        ),
+                      )
+                    : SizedBox(
+                        child: Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.42,
+                          ),
+                          Text("No Default Schedule Available"),
+                        ],
+                      ))
               ],
             ),
           ),

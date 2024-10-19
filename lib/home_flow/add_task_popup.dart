@@ -47,94 +47,104 @@ addTaskDialog(BuildContext context,
 
   // set up the button
 
-  Widget closeButton = ElevatedButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      child: const Text('Close'));
-
-  Widget addButton = ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColor),
-      onPressed: () {
-        if (taskController.text.trim() == '') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please enter a task')));
-          return;
-        }
-        if (startTime == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please select start time')));
-          return;
-        }
-        if (endTime == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please select end time')));
-          return;
-        }
-        if (defaultType != null) {
-          Provider.of<TaskProvider>(context, listen: false)
-              .addOrEditDefaultTask(TaskModel(
-                  id: isEdit ? task!.id : DateTime.now().toString(),
-                  task: taskController.text.trim(),
-                  link: linkController.text.trim(),
-                  startTime: startTime,
-                  endTime: endTime,
-                  category: category,
-                  description: desController.text.trim(),
-                  icon: selectedTaskIconName,
-                  status: 'incomplete',
-                  app: app));
+  Widget closeButton = SizedBox(
+    height: 34,
+    child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+        onPressed: () {
           Navigator.pop(context);
+        },
+        child: const Text('Close')),
+  );
 
-          return;
-        }
-        if (isEdit) {
-          Provider.of<TaskProvider>(context, listen: false)
-              .editTask(
-                  task: TaskModel(
-                      id: task!.id,
-                      task: taskController.text.trim(),
-                      link: linkController.text.trim(),
-                      startTime: startTime,
-                      endTime: endTime,
-                      category: category,
-                      date: date,
-                      description: desController.text.trim(),
-                      icon: selectedTaskIconName,
-                      status: inComplete ?? inProgress ?? complete,
-                      app: app))
-              .then((val) {
-            if (val) {
-              Navigator.pop(context);
+  Widget addButton = SizedBox(
+      height: 34,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              backgroundColor: Theme.of(context).primaryColor),
+          onPressed: () {
+            if (taskController.text.trim() == '') {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please enter a task')));
+              return;
             }
-          });
-        } else {
-          Provider.of<TaskProvider>(context, listen: false)
-              .addTask(
-                  task: TaskModel(
-                      id: DateTime.now().toString(),
+            if (startTime == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please select start time')));
+              return;
+            }
+            if (endTime == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please select end time')));
+              return;
+            }
+            if (defaultType != null) {
+              Provider.of<TaskProvider>(context, listen: false)
+                  .addOrEditDefaultTask(TaskModel(
+                      id: isEdit ? task!.id : DateTime.now().toString(),
                       task: taskController.text.trim(),
                       link: linkController.text.trim(),
                       startTime: startTime,
                       endTime: endTime,
                       category: category,
-                      date: date,
                       description: desController.text.trim(),
                       icon: selectedTaskIconName,
                       status: 'incomplete',
-                      app: app))
-              .then((val) {
-            if (val) {
+                      app: app));
               Navigator.pop(context);
+
+              return;
             }
-          });
-        }
-      },
-      child: Text(
-        isEdit ? 'Edit' : 'Add',
-        style: const TextStyle(color: Colors.white),
-      ));
+            if (isEdit) {
+              Provider.of<TaskProvider>(context, listen: false)
+                  .editTask(
+                      task: TaskModel(
+                          id: task!.id,
+                          task: taskController.text.trim(),
+                          link: linkController.text.trim(),
+                          startTime: startTime,
+                          endTime: endTime,
+                          category: category,
+                          date: date,
+                          description: desController.text.trim(),
+                          icon: selectedTaskIconName,
+                          status: inComplete ?? inProgress ?? complete,
+                          app: app))
+                  .then((val) {
+                if (val) {
+                  Navigator.pop(context);
+                }
+              });
+            } else {
+              Provider.of<TaskProvider>(context, listen: false)
+                  .addTask(
+                      task: TaskModel(
+                          id: DateTime.now().toString(),
+                          task: taskController.text.trim(),
+                          link: linkController.text.trim(),
+                          startTime: startTime,
+                          endTime: endTime,
+                          category: category,
+                          date: date,
+                          description: desController.text.trim(),
+                          icon: selectedTaskIconName,
+                          status: 'incomplete',
+                          app: app))
+                  .then((val) {
+                if (val) {
+                  Navigator.pop(context);
+                }
+              });
+            }
+          },
+          child: Text(
+            isEdit ? 'Edit' : 'Add',
+            style: const TextStyle(color: Colors.white),
+          )));
   // set up the AlertDialog
 
   // show the dialog
@@ -151,8 +161,10 @@ addTaskDialog(BuildContext context,
               children: [
                 TextField(
                   controller: taskController,
-                  decoration: const InputDecoration(
-                      labelText: "Task", border: OutlineInputBorder()),
+                  decoration: InputDecoration(
+                      labelText: "Task",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8))),
                 ),
                 const SizedBox(
                   height: 20,
@@ -160,18 +172,20 @@ addTaskDialog(BuildContext context,
                 TextField(
                   maxLines: 2,
                   controller: desController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       labelText: "Short description",
-                      border: OutlineInputBorder()),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8))),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextField(
                   controller: linkController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       labelText: "Link realted to task",
-                      border: OutlineInputBorder()),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8))),
                 ),
                 const SizedBox(
                   height: 20,
@@ -211,14 +225,25 @@ addTaskDialog(BuildContext context,
                           }
                           setState(() {});
                         },
-                        child: startTime == null
-                            ? const Text('Start Time')
-                            : Text(DateFormat('HH:mm:ss').format(DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                                startTime!.hour,
-                                startTime!.minute)))),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.timer_sharp,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            startTime == null
+                                ? const Text('Start Time')
+                                : Text(DateFormat('HH:mm:ss').format(DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                    startTime!.hour,
+                                    startTime!.minute)))
+                          ],
+                        )),
                     const Spacer(),
                     TextButton(
                         onPressed: () async {
@@ -253,20 +278,29 @@ addTaskDialog(BuildContext context,
                           setState(() {});
                           // }
                         },
-                        child: endTime == null
-                            ? const Text('End Time')
-                            : Text(DateFormat('HH:mm:ss').format(DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                                endTime!.hour,
-                                endTime!.minute)))),
+                        child: Row(children: [
+                          Icon(
+                            Icons.timer_sharp,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          endTime == null
+                              ? const Text('End Time')
+                              : Text(DateFormat('HH:mm:ss').format(DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  endTime!.hour,
+                                  endTime!.minute)))
+                        ])),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text('Category:'),
+                    const Text('Category :'),
                     DropdownButton<String>(
                       value: category,
                       items: <String>[
@@ -291,27 +325,41 @@ addTaskDialog(BuildContext context,
                 const SizedBox(
                   height: 10,
                 ),
-                DropdownButton<String>(
-                  hint: const Text('Select a Task Icon'),
-                  value: selectedTaskIconName,
-                  items: taskIcons.map((taskIcon) {
-                    final iconName = taskIcon.keys.first;
-                    return DropdownMenuItem<String>(
-                      value: iconName,
-                      child: Row(
-                        children: [
-                          Icon(taskIcon[iconName], size: 24),
-                          const SizedBox(width: 8),
-                          Text(iconName),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedTaskIconName = newValue!;
-                    });
-                  },
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.grey, width: 1), // Border color and width
+                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    // Hides the default underline
+                    child: DropdownButton<String>(
+                      hint: const Text('Select a Task Icon'),
+                      value: selectedTaskIconName,
+                      items: taskIcons.map((taskIcon) {
+                        final iconName = taskIcon.keys.first;
+                        return DropdownMenuItem<String>(
+                          value: iconName,
+                          child: Row(
+                            children: [
+                              Icon(taskIcon[iconName], size: 24),
+                              const SizedBox(width: 8),
+                              Text(iconName),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedTaskIconName = newValue!;
+                        });
+                      },
+                      isExpanded:
+                          true, // Ensures the dropdown stretches to full width
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -404,6 +452,9 @@ addTaskDialog(BuildContext context,
           ),
           actions: [
             closeButton,
+            SizedBox(
+              width: 70,
+            ),
             addButton,
           ],
         ),

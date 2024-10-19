@@ -48,12 +48,14 @@ class _ViewTasksDataState extends State<ViewTasksData> {
           backgroundColor: Theme.of(context).primaryColor,
           title: const Text(
             'Status',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          bottom: const TabBar(
-            indicatorColor: Colors.white,
+          bottom: TabBar(
+            indicatorColor: Theme.of(context).primaryColor,
             labelColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.tab,
+            unselectedLabelColor: Colors.grey,
             tabs: <Widget>[
               Tab(
                 text: 'Incompleted',

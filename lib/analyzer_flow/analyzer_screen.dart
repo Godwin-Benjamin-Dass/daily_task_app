@@ -33,6 +33,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
   List<TaskModel> money = [];
   List<TaskModel> enjoyment = [];
   List<TaskModel> sleep = [];
+  bool taskBreakUp = false;
 
   getTaskAnalysis() {
     Future.delayed(Duration.zero, () {
@@ -64,9 +65,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
               color: Colors.white,
             )),
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
+        title: Text(
           'Analyzer',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
       body: Consumer<TaskProvider>(
@@ -74,363 +76,590 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Text(
-                      widget.isParticularDay
-                          ? 'Selected Date: '
-                          : 'Start Range: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      DateFormat("dd, MMM, yy").format(widget.isParticularDay
-                          ? widget.startDate.add(const Duration(days: 1))
-                          : widget.startDate),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                if (!widget.isParticularDay)
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.calendar_month_outlined,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        DateFormat("dd MMM yy").format(widget.isParticularDay
+                            ? widget.startDate.add(const Duration(days: 1))
+                            : widget.startDate),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
+                      if (!widget.isParticularDay)
+                        Text(
+                          " - ${DateFormat("dd MMM yy").format(widget.endDate)}",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
                       const Text(
-                        'End Date: ',
+                        'Total number of task: ',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.w500, fontSize: 18),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
-                        DateFormat("dd, MMM, yy").format(widget.endDate),
+                        task.analyseTask.length.toString(),
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                            fontWeight: FontWeight.w800, fontSize: 18),
                       ),
                     ],
                   ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Total no of task: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  PieChartWidget(
+                    type: 'Overall Status',
+                    pending: getIncomplete(analyzerTask),
+                    inProgress: getPending(analyzerTask),
+                    completed: getCompleted(analyzerTask),
+                    ontap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewTasksData(
+                                    tasks: analyzerTask,
+                                  )));
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/images/animationBG.png')),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          size: 50,
+                                          Icons.health_and_safety,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        Text(
+                                          'Health',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Text(
+                                            " ${health.length.toString()} tasks",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer_outlined),
+                                          Text(
+                                            " ${calculateTotalHours(health).toStringAsFixed(0)} hours",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.46,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/images/animationBG.png')),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          size: 50,
+                                          Icons.school,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        Text(
+                                          'Studies',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Text(
+                                            " ${studies.length.toString()} tasks",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer_outlined),
+                                          Text(
+                                            " ${calculateTotalHours(studies).toStringAsFixed(0)} hours",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/images/animationBG.png')),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          size: 50,
+                                          Icons.currency_rupee,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        Text(
+                                          'Money',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Text(
+                                            " ${money.length.toString()} tasks",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer_outlined),
+                                          Text(
+                                            " ${calculateTotalHours(money).toStringAsFixed(0)} hours",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.46,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/images/animationBG.png')),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          size: 50,
+                                          Icons.mood,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        Text(
+                                          'Enjoyment',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Text(
+                                            " ${enjoyment.length.toString()} tasks",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer_outlined),
+                                          Text(
+                                            " ${calculateTotalHours(enjoyment).toStringAsFixed(0)} hours",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/images/animationBG.png')),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, right: 4),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/sleeping_icon.png",
+                                          width: 30,
+                                          height: 30,
+                                          fit: BoxFit.cover,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        Text(
+                                          'Sleep',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Text(
+                                            " ${sleep.length.toString()} tasks",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer_outlined),
+                                          Text(
+                                            " ${calculateTotalHours(sleep).toStringAsFixed(0)} hours",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        taskBreakUp = !taskBreakUp;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Task breakup',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 16),
+                        ),
+                        Icon(!taskBreakUp
+                            ? Icons.keyboard_arrow_down_rounded
+                            : Icons.keyboard_arrow_up_rounded),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      task.analyseTask.length.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Task breakup: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      '- Health: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      health.length.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '- Hrs: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      calculateTotalHours(health).toStringAsFixed(0),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      '- Studies: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      studies.length.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '- Hrs: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      calculateTotalHours(studies).toStringAsFixed(0),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      '- Money: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      money.length.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '- Hrs: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      calculateTotalHours(money).toStringAsFixed(0),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      '- Enjoymnet: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      enjoyment.length.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '- Hrs: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      calculateTotalHours(enjoyment).toStringAsFixed(0),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      '- Sleep: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      sleep.length.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      '- Hrs: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      calculateTotalHours(sleep).toStringAsFixed(0),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                PieChartWidget(
-                  type: 'Overall Status',
-                  pending: getIncomplete(analyzerTask),
-                  inProgress: getPending(analyzerTask),
-                  completed: getCompleted(analyzerTask),
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewTasksData(
-                                  tasks: analyzerTask,
-                                )));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                PieChartWidget(
-                  type: 'Health Status',
-                  pending: getIncomplete(health),
-                  inProgress: getPending(health),
-                  completed: getCompleted(health),
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewTasksData(
-                                  tasks: health,
-                                )));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                PieChartWidget(
-                  type: 'Studies Status',
-                  pending: getIncomplete(studies),
-                  inProgress: getPending(studies),
-                  completed: getCompleted(studies),
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewTasksData(
-                                  tasks: studies,
-                                )));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                PieChartWidget(
-                  type: 'Money Status',
-                  pending: getIncomplete(money),
-                  inProgress: getPending(money),
-                  completed: getCompleted(money),
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewTasksData(
-                                  tasks: money,
-                                )));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                PieChartWidget(
-                  type: 'Enjoyment Status',
-                  pending: getIncomplete(enjoyment),
-                  inProgress: getPending(enjoyment),
-                  completed: getCompleted(enjoyment),
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewTasksData(
-                                  tasks: enjoyment,
-                                )));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                PieChartWidget(
-                  type: 'Sleep Status',
-                  pending: getIncomplete(sleep),
-                  inProgress: getPending(sleep),
-                  completed: getCompleted(sleep),
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewTasksData(
-                                  tasks: sleep,
-                                )));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  taskBreakUp
+                      ? Column(
+                          children: [
+                            PieChartWidget(
+                              type: 'Health Status',
+                              pending: getIncomplete(health),
+                              inProgress: getPending(health),
+                              completed: getCompleted(health),
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewTasksData(
+                                              tasks: health,
+                                            )));
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            PieChartWidget(
+                              type: 'Studies Status',
+                              pending: getIncomplete(studies),
+                              inProgress: getPending(studies),
+                              completed: getCompleted(studies),
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewTasksData(
+                                              tasks: studies,
+                                            )));
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            PieChartWidget(
+                              type: 'Money Status',
+                              pending: getIncomplete(money),
+                              inProgress: getPending(money),
+                              completed: getCompleted(money),
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewTasksData(
+                                              tasks: money,
+                                            )));
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            PieChartWidget(
+                              type: 'Enjoyment Status',
+                              pending: getIncomplete(enjoyment),
+                              inProgress: getPending(enjoyment),
+                              completed: getCompleted(enjoyment),
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewTasksData(
+                                              tasks: enjoyment,
+                                            )));
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            PieChartWidget(
+                              type: 'Sleep Status',
+                              pending: getIncomplete(sleep),
+                              inProgress: getPending(sleep),
+                              completed: getCompleted(sleep),
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewTasksData(
+                                              tasks: sleep,
+                                            )));
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                ],
+              ),
             ),
           ),
         ),

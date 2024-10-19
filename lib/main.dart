@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
     if (notificationAppLaunchDetails != null &&
         notificationAppLaunchDetails.didNotificationLaunchApp) {
       // App was launched by clicking the notification
-      String? payload = notificationAppLaunchDetails.payload;
+      String? payload = notificationAppLaunchDetails.notificationResponse!.payload;
 
       if (payload != null) {
         TaskModel? task = await TaskService.getTaskById(payload);

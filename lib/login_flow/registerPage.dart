@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setData();
   }
 
-  String option = "What is your fav sport?";
+  String option = "What is your Fav Sport?";
 
   @override
   Widget build(BuildContext context) {
@@ -148,9 +148,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: DropdownButton<String>(
                         value: option,
                         items: <String>[
-                          'What is your fav sport?',
-                          'What is your family name?',
-                          'First school name?'
+                          'What is your Fav Sport?',
+                          'What is your Family name?',
+                          'What is your First school name?'
                         ].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,

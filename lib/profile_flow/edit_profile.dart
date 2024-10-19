@@ -153,7 +153,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Name: *',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -176,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Blood Group: *',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -199,7 +199,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'DOB: *',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -223,7 +223,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Contact Number: *',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -247,7 +247,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Email id: *',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -270,7 +270,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Address: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -293,7 +293,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Aadhar Card Number: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -317,7 +317,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Pan Card Number: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -340,7 +340,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Driving license: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,
@@ -363,7 +363,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const Text(
                 'Voter Id: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
               const SizedBox(
                 height: 10,

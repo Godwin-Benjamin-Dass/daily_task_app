@@ -20,30 +20,43 @@ class SettingsPage extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
           'Settings',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12),
         child: Column(children: [
           const SizedBox(height: 20),
           Row(
             children: [
               const Text(
-                '1. Week-day Shedule:',
+                '1. Week-day Schedule:',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               const Spacer(),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddEditDefaultShedule(
-                                  sheduleType: 'Week-day',
-                                )));
-                  },
-                  child: const Text('Add/Edit Shedule'))
+              SizedBox(
+                  height: 36,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AddEditDefaultShedule(
+                                      sheduleType: 'Week-day',
+                                    )));
+                      },
+                      child: const Text(
+                        'Add/Edit Schedule',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600),
+                      )))
             ],
           ),
           const SizedBox(
@@ -52,20 +65,33 @@ class SettingsPage extends StatelessWidget {
           Row(
             children: [
               const Text(
-                '2. Week-end Shedule:',
+                '2. Week-end Schedule:',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               const Spacer(),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddEditDefaultShedule(
-                                  sheduleType: 'Week-end',
-                                )));
-                  },
-                  child: const Text('Add/Edit Shedule'))
+              SizedBox(
+                height: 36,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddEditDefaultShedule(
+                                    sheduleType: 'Week-end',
+                                  )));
+                    },
+                    child: const Text(
+                      'Add/Edit Schedule',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    )),
+              )
             ],
           ),
         ]),
