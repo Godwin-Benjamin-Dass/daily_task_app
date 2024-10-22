@@ -50,6 +50,9 @@ dependencies:
   flutter_local_notifications: ^17.2.3
   permission_handler: ^11.3.1
   timezone: 
+  workmanager: ^0.5.2
+  disable_battery_optimization: ^1.1.1
+  
 
 
 

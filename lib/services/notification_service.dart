@@ -1,16 +1,14 @@
-// import 'package:daily_task_app/home_flow/home_screen.dart';
 import 'dart:developer';
-
 import 'package:daily_task_app/main.dart';
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/services/task_service.dart';
 import 'package:daily_task_app/widgets/task_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationService {
   static final NotificationService _notificationService =
@@ -37,23 +35,19 @@ class NotificationService {
         onDidReceiveNotificationResponse: (details) =>
             onSelectNotification(details.payload));
 
-    // Request permission after initialization
     await _requestPermissions();
   }
 
   Future<void> _requestPermissions() async {
     var status = await Permission.notification.status;
     if (status.isDenied) {
-      // We haven't asked for permission yet or the permission has been denied before, but not permanently.
       Permission.notification.request();
     }
   }
 
-  Future onSelectNotification(String? payload) async {
-    // Show popup when notification is clicked
+  Future<void> onSelectNotification(String? payload) async {
     if (payload != null) {
       log(payload);
-
       TaskModel? task = await TaskService.getTaskById(payload);
       if (task == null) {
         return;
@@ -63,7 +57,6 @@ class NotificationService {
   }
 
   static Future<void> showDialogs(TaskModel task) async {
-    // Get the current context to show the dialog
     BuildContext? context = navigatorKey.currentContext;
     if (context != null) {
       showDialog(
@@ -72,8 +65,6 @@ class NotificationService {
           return AlertDialog(
             backgroundColor: Colors.transparent,
             elevation: 0,
-
-            // title: const Text("Notification Data Nigga"),
             content: TaskTileWidget(
               isNotificationPopUp: true,
               isAnalyseTask: true,
@@ -93,7 +84,6 @@ class NotificationService {
     id,
     required String title,
   }) async {
-    log('sheduled success==============>$scheduledTime');
     var androidDetails = AndroidNotificationDetails(
       payload,
       'channel_name',
@@ -102,21 +92,61 @@ class NotificationService {
     );
 
     var notificationDetails = NotificationDetails(android: androidDetails);
-
-    await _localNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      'Tap to see details',
-      tz.TZDateTime.from(scheduledTime, tz.local),
-      notificationDetails,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: payload,
-    );
+    try {
+      await _localNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        'Tap to see details',
+        tz.TZDateTime.from(scheduledTime, tz.local),
+        notificationDetails,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload,
+      );
+      Fluttertoast.showToast(
+          msg: 'You will be notified at $scheduledTime',
+          backgroundColor: Colors.green,
+          textColor: Colors.white);
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'fail : $e',
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+      Fluttertoast.showToast(
+          msg: 'stat : $id',
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+    }
   }
 
   static Future<void> cancelNotification(int notificationId) async {
     await _localNotificationsPlugin.cancel(notificationId);
+  }
+
+  // New function to handle background notifications
+  Future<void> triggerBackgroundNotifications() async {
+    // Logic to fetch tasks or notifications that should be shown
+    List<TaskModel> pendingTasks = await TaskService.getPendingTasks();
+
+    for (TaskModel task in pendingTasks) {
+      // Show notifications for each pending task
+      await scheduleNotification(
+        payload: task.id!,
+        scheduledTime: DateTime(
+          task.date!.year,
+          task.date!.month,
+          task.date!.day,
+          task.status == 'incomplete'
+              ? task.startTime!.hour
+              : task.endTime!.hour,
+          task.status == 'incomplete'
+              ? task.startTime!.minute
+              : task.endTime!.minute,
+        ), // Immediate notification
+        id: int.parse(task.id!),
+        title: 'Reminder for Task: ${task.task}',
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
+import 'package:daily_task_app/services/notification_service.dart';
 import 'package:daily_task_app/static_data.dart';
 import 'package:device_installed_apps/device_installed_apps.dart';
 import 'package:flutter/material.dart';
@@ -272,38 +273,39 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
               if (widget.isNotificationPopUp)
                 Center(
                     child: ElevatedButton(
-                        onPressed: () {
-                          if (widget.task.status == 'incomplete') {
-                            Provider.of<TaskProvider>(context, listen: false)
-                                .editTask(
-                                    task: TaskModel(
-                                        date: widget.task.date,
-                                        id: widget.task.id,
-                                        task: widget.task.task,
-                                        link: widget.task.link,
-                                        startTime: widget.task.startTime,
-                                        endTime: widget.task.endTime,
-                                        category: widget.task.category,
-                                        description: widget.task.description,
-                                        icon: widget.task.icon,
-                                        status: 'pending',
-                                        app: widget.task.app));
-                          } else {
-                            Provider.of<TaskProvider>(context, listen: false)
-                                .editTask(
-                                    task: TaskModel(
-                                        date: widget.task.date,
-                                        id: widget.task.id,
-                                        task: widget.task.task,
-                                        link: widget.task.link,
-                                        startTime: widget.task.startTime,
-                                        endTime: widget.task.endTime,
-                                        category: widget.task.category,
-                                        description: widget.task.description,
-                                        icon: widget.task.icon,
-                                        status: 'completed',
-                                        app: widget.task.app));
+                        onPressed: () async {
+                          final TaskModel taskTobeUpdated = TaskModel(
+                              date: widget.task.date,
+                              id: widget.task.id,
+                              task: widget.task.task,
+                              link: widget.task.link,
+                              startTime: widget.task.startTime,
+                              endTime: widget.task.endTime,
+                              category: widget.task.category,
+                              description: widget.task.description,
+                              icon: widget.task.icon,
+                              status: widget.task.status == 'incomplete'
+                                  ? 'pending'
+                                  : 'completed',
+                              app: widget.task.app);
+                          //just small space
+                          Provider.of<TaskProvider>(context, listen: false)
+                              .editTask(task: taskTobeUpdated);
+                          if (taskTobeUpdated.status != 'completed') {
+                            await NotificationService.scheduleNotification(
+                                id: DateTime.parse(taskTobeUpdated.id!)
+                                    .microsecond,
+                                payload: taskTobeUpdated.id!,
+                                scheduledTime: DateTime(
+                                  taskTobeUpdated.date!.year,
+                                  taskTobeUpdated.date!.month,
+                                  taskTobeUpdated.date!.day,
+                                  taskTobeUpdated.endTime!.hour,
+                                  taskTobeUpdated.endTime!.minute,
+                                ),
+                                title: taskTobeUpdated.task!);
                           }
+                          // ignore: use_build_context_synchronously
                           Navigator.of(context).pop();
                         },
                         child: Text(widget.task.status == 'incomplete'

@@ -117,6 +117,7 @@ class TaskService {
           DateTime.parse(updatedTask.id!).microsecond);
       return;
     }
+
     DateTime sheduleTime = DateTime(
       updatedTask.date!.year,
       updatedTask.date!.month,
@@ -168,6 +169,26 @@ class TaskService {
     } else {
       return null; // Return null if no task is found
     }
+  }
+
+  static Future<List<TaskModel>> getPendingTasks() async {
+    final db = await database;
+    DateTime currentTime = DateTime.now();
+
+    // Query to get tasks with start time after the current time
+    final List<Map<String, dynamic>> maps = await db.query(
+      'tasks',
+      where: 'date >= ? AND startTime >= ?',
+      whereArgs: [
+        currentTime.toIso8601String().split('T')[0], // Date condition
+        currentTime.toIso8601String() // Time condition
+      ],
+    );
+
+    // Return the list of future tasks
+    return List.generate(maps.length, (i) {
+      return TaskModel.fromJson(maps[i]);
+    });
   }
 
   static Future saveDefaultTask(

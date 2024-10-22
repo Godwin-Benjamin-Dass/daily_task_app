@@ -1,25 +1,51 @@
 import 'package:daily_task_app/login_flow/login_page.dart';
 import 'package:daily_task_app/login_flow/registerPage.dart';
-import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/providers/profile_provider.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
 import 'package:daily_task_app/services/notification_service.dart';
-import 'package:daily_task_app/services/task_service.dart';
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 bool isNotified = false;
 FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    // Trigger the existing check and notification logic
+    await NotificationService().triggerBackgroundNotifications();
+    return Future.value(true);
+  });
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Initialize the notification service
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   await NotificationService().initNotification(navigatorKey.currentContext);
+  bool? isAutoStartEnabled =
+      await DisableBatteryOptimization.isAutoStartEnabled;
+  if (isAutoStartEnabled == false || isAutoStartEnabled == null) {
+    await DisableBatteryOptimization.showEnableAutoStartSettings(
+        "Enable Auto Start",
+        "Follow the steps and enable the auto start of this app");
+  }
+  // Initialize WorkManager for background tasks
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+
+  // Schedule a periodic background task
+  Workmanager().registerPeriodicTask(
+    "notification-task", // Unique name for the task
+    "background_notification", // Task ID
+    frequency: const Duration(minutes: 1), // Interval for the background task
+  );
 
   var key = prefs.getString('pass_key');
   debugPrint(key);
@@ -54,7 +80,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        navigatorKey: navigatorKey, // Use the global navigator key
+        navigatorKey: navigatorKey,
         home: widget.skey == null ? const RegisterPage() : const LoginPage(),
         theme: ThemeData(
           fontFamily: "Work Sans",
@@ -71,18 +97,12 @@ class _MyAppState extends State<MyApp> {
 
     if (notificationAppLaunchDetails != null &&
         notificationAppLaunchDetails.didNotificationLaunchApp) {
-      // App was launched by clicking the notification
-      String? payload = notificationAppLaunchDetails.notificationResponse!.payload;
+      String? payload =
+          notificationAppLaunchDetails.notificationResponse!.payload;
 
       if (payload != null) {
-        TaskModel? task = await TaskService.getTaskById(payload);
-        if (task == null) {
-          return;
-        }
-        NotificationService.showDialogs(task);
+        NotificationService().onSelectNotification(payload);
       }
-    } else {
-      // App was opened directly
     }
   }
 }
