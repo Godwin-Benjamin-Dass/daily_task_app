@@ -75,44 +75,77 @@ class _ViewTasksDataState extends State<ViewTasksData> {
                 ? const Center(
                     child: Text('No Incompleted Tasks'),
                   )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: inComplete.length,
-                    itemBuilder: (ctx, i) {
-                      return TaskTileWidget(
-                          isAnalyseTask: true,
-                          idx: i + 1,
-                          task: inComplete[i],
-                          ontap: () {});
-                    }),
+                : Stack(children: [
+                    Center(
+                        child: Image.asset(
+                      "assets/images/logo.png",
+                      height: 80,
+                      width: 80,
+                      color: Colors.white
+                          .withOpacity(0.8), // Apply a semi-transparent color
+                      colorBlendMode: BlendMode.lighten,
+                    )),
+                    ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: inComplete.length,
+                        itemBuilder: (ctx, i) {
+                          return TaskTileWidget(
+                              isAnalyseTask: true,
+                              idx: i + 1,
+                              task: inComplete[i],
+                              ontap: () {});
+                        }),
+                  ]),
             inProgress.isEmpty
                 ? const Center(
                     child: Text('No Task Inprogress'),
                   )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: inProgress.length,
-                    itemBuilder: (ctx, i) {
-                      return TaskTileWidget(
-                          isAnalyseTask: true,
-                          idx: i + 1,
-                          task: inProgress[i],
-                          ontap: () {});
-                    }),
+                : Stack(children: [
+                    Center(
+                        child: Image.asset(
+                      "assets/images/logo.png",
+                      height: 80,
+                      width: 80,
+                      color: Colors.white
+                          .withOpacity(0.8), // Apply a semi-transparent color
+                      colorBlendMode: BlendMode.lighten,
+                    )),
+                    ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: inProgress.length,
+                        itemBuilder: (ctx, i) {
+                          return TaskTileWidget(
+                              isAnalyseTask: true,
+                              idx: i + 1,
+                              task: inProgress[i],
+                              ontap: () {});
+                        }),
+                  ]),
             completed.isEmpty
                 ? const Center(
                     child: Text('No Completed Tasks'),
                   )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: completed.length,
-                    itemBuilder: (ctx, i) {
-                      return TaskTileWidget(
-                          isAnalyseTask: true,
-                          idx: i + 1,
-                          task: completed[i],
-                          ontap: () {});
-                    }),
+                : Stack(children: [
+                    Center(
+                        child: Image.asset(
+                      "assets/images/logo.png",
+                      height: 80,
+                      width: 80,
+                      color: Colors.white
+                          .withOpacity(0.8), // Apply a semi-transparent color
+                      colorBlendMode: BlendMode.lighten,
+                    )),
+                    ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: completed.length,
+                        itemBuilder: (ctx, i) {
+                          return TaskTileWidget(
+                              isAnalyseTask: true,
+                              idx: i + 1,
+                              task: completed[i],
+                              ontap: () {});
+                        }),
+                  ])
           ],
         ),
       ),

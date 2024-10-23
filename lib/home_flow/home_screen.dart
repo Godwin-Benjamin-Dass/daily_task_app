@@ -51,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context) => const SettingsPage()));
               },
               icon: const Icon(
-                Icons.settings,
-                color: Colors.white,
+                Icons.calendar_month_outlined,
+                color: Colors.white70,
               )),
           InkWell(
             onTap: () async {
@@ -190,8 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             icon: Image.asset(
                               "assets/images/sleeping_icon.png",
-                              width: 35,
-                              height: 35,
+                              width: 32,
+                              height: 32,
                               fit: BoxFit.cover,
                               color: Colors.white,
                             ))
@@ -215,32 +215,78 @@ class _HomeScreenState extends State<HomeScreen> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                    title: const Text("Select type"),
+                                    title: const Text(
+                                      "Select type",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              task
-                                                  .copyDefalutTask(
-                                                      date: date,
-                                                      type: 'Week-day')
-                                                  .then((val) {
-                                                Navigator.pop(context);
-                                              });
-                                            },
-                                            child: const Text('Week Day')),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              task
-                                                  .copyDefalutTask(
-                                                      date: date,
-                                                      type: 'Week-end')
-                                                  .then((val) {
-                                                Navigator.pop(context);
-                                              });
-                                            },
-                                            child: const Text('Week End'))
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.55,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8))),
+                                              onPressed: () {
+                                                task
+                                                    .copyDefalutTask(
+                                                        date: date,
+                                                        type: 'Week-day')
+                                                    .then((val) {
+                                                  Navigator.pop(context);
+                                                });
+                                              },
+                                              child: const Text(
+                                                'Week Day',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.55,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8))),
+                                              onPressed: () {
+                                                task
+                                                    .copyDefalutTask(
+                                                        date: date,
+                                                        type: 'Week-end')
+                                                    .then((val) {
+                                                  Navigator.pop(context);
+                                                });
+                                              },
+                                              child: const Text(
+                                                'Week End',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )),
+                                        )
                                       ],
                                     ),
                                     actions: [
@@ -248,7 +294,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          child: const Text('Close'))
+                                          child: const Text(
+                                            'Close',
+                                            style: TextStyle(color: Colors.red),
+                                          ))
                                     ],
                                   ));
                         },
@@ -322,18 +371,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               )
-            : ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: task.dailyTask.length,
-                itemBuilder: (ctx, i) {
-                  return TaskTileWidget(
-                      idx: i + 1,
-                      task: task.dailyTask[i],
-                      ontap: () {
-                        addTaskDialog(context,
-                            date: date, isEdit: true, task: task.dailyTask[i]);
-                      });
-                }),
+            : Stack(
+                children: [
+                  Center(
+                      child: Image.asset(
+                    "assets/images/logo.png",
+                    height: 80,
+                    width: 80,
+                    color: Colors.white
+                        .withOpacity(0.8), // Apply a semi-transparent color
+                    colorBlendMode: BlendMode.lighten,
+                  )),
+                  ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: task.dailyTask.length,
+                      itemBuilder: (ctx, i) {
+                        return TaskTileWidget(
+                            idx: i + 1,
+                            task: task.dailyTask[i],
+                            ontap: () {
+                              addTaskDialog(context,
+                                  date: date,
+                                  isEdit: true,
+                                  task: task.dailyTask[i]);
+                            });
+                      }),
+                ],
+              ),
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),

@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
             )),
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
-          'Settings',
+          'Schedules',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

@@ -49,15 +49,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
-                    // Image.asset(
-                    //   "assets/images/logo.png",
-                    //   color: Theme.of(context).primaryColor,
-                    //   height: MediaQuery.of(context).size.height * .1,
-                    // ),
+                    Image.asset(
+                      "assets/images/logo.png",
+                      color: Theme.of(context).primaryColor,
+                      height: 60,
+                    ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.07,
+                      height: MediaQuery.of(context).size.height * 0.04,
                     ),
                     const Text(
                       "PIN Verification",

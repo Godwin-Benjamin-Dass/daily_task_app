@@ -54,7 +54,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -62,7 +62,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,15 +79,15 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                     const SizedBox(
                       width: 20,
                     ),
-                  if (widget.task.icon != 'sleeping')
+                  if (widget.task.category != 'Sleep')
                     Icon(
                         size: 30,
-                        getIcon(widget.task.icon!),
+                        getIcon(widget.task.category!),
                         color: Theme.of(context).primaryColor),
-                  if (widget.task.icon == 'sleeping')
+                  if (widget.task.category == 'Sleep')
                     Image.asset("assets/images/sleeping_icon.png",
-                        width: 50,
-                        height: 50,
+                        width: 30,
+                        height: 30,
                         fit: BoxFit.cover,
                         color: Theme.of(context).primaryColor),
                   const Spacer(),
@@ -122,23 +122,27 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
               Row(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Start time: ${formatTimeOfDay(widget.task.startTime!)}',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'End time: ${formatTimeOfDay(widget.task.endTime!)}',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Icon(
+                              Icons.access_time_rounded,
+                              color: Theme.of(context).primaryColor,
+                              size: 15,
+                            ),
+                          ),
+                          Text(
+                            '${formatTimeOfDay(widget.task.startTime!)} - ${formatTimeOfDay(widget.task.endTime!)}',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       if (widget.isNotificationPopUp == true)
                         Text(
@@ -147,21 +151,46 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                               fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       if (widget.isAnalyseTask)
-                        Text(
-                          'Date: ${DateFormat("dd, MMM, yy").format(widget.task.date!)}',
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 15,
+                                ),
+                              ),
+                              Text(
+                                '${DateFormat("dd MMM yyyy").format(widget.task.date!)}',
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ),
                     ],
                   ),
                   const SizedBox(
                     width: 15,
                   ),
+                  Spacer(),
                   if (widget.isNotificationPopUp == false)
-                    Text(
-                      ' Duration: ${calculateDuration(widget.task.startTime!, widget.task.endTime!)}',
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          size: 18,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        Text(
+                          ' ${calculateDuration(widget.task.startTime!, widget.task.endTime!)}',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   IconButton(
                       onPressed: () {
@@ -182,15 +211,55 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Description: ',
+                      'Task Representation: ',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
-                    Text(widget.task.description!),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Row(
+                        children: [
+                          if (widget.task.icon != 'sleeping')
+                            Icon(
+                                size: 25,
+                                getIcon(widget.task.icon!),
+                                color: Theme.of(context).primaryColor),
+                          if (widget.task.icon == 'sleeping')
+                            Image.asset("assets/images/sleeping_icon.png",
+                                width: 25,
+                                height: 25,
+                                fit: BoxFit.cover,
+                                color: Theme.of(context).primaryColor),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            widget.task.icon!,
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (widget.task.description != '')
+                      Column(
+                        children: [
+                          const Text(
+                            'Description: ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 15),
+                          ),
+                          Text(widget.task.description!),
+                        ],
+                      ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     const Text(
                       'Link you provided: ',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 3,
                     ),
                     InkWell(
                         onTap: () {
@@ -205,6 +274,9 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                           "${widget.task.link!}(click to launch url)",
                           style: const TextStyle(color: Colors.purple),
                         )),
+                    SizedBox(
+                      height: 3,
+                    ),
                     if (widget.task.app != null)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

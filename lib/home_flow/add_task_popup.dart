@@ -142,7 +142,7 @@ addTaskDialog(BuildContext context,
             }
           },
           child: Text(
-            isEdit ? 'Edit' : 'Add',
+            'Save',
             style: const TextStyle(color: Colors.white),
           )));
   // set up the AlertDialog

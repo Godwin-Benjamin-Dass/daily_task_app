@@ -198,7 +198,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Icon(
+                                            Icons.hourglass_bottom_rounded,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${health.length.toString()} tasks",
                                             style: const TextStyle(
@@ -209,7 +212,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(Icons.timer_outlined),
+                                          Icon(
+                                            Icons.timer_outlined,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${calculateTotalHours(health).toStringAsFixed(0)} hours",
                                             style: const TextStyle(
@@ -250,11 +256,11 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           color: Theme.of(context).primaryColor,
                                         ),
                                         Text(
-                                          'Studies',
+                                          'Knowledge',
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 15,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -271,7 +277,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Icon(
+                                            Icons.hourglass_bottom_rounded,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${studies.length.toString()} tasks",
                                             style: const TextStyle(
@@ -282,7 +291,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(Icons.timer_outlined),
+                                          Icon(
+                                            Icons.timer_outlined,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${calculateTotalHours(studies).toStringAsFixed(0)} hours",
                                             style: const TextStyle(
@@ -352,7 +364,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Icon(
+                                            Icons.hourglass_bottom_rounded,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${money.length.toString()} tasks",
                                             style: const TextStyle(
@@ -363,7 +378,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(Icons.timer_outlined),
+                                          Icon(
+                                            Icons.timer_outlined,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${calculateTotalHours(money).toStringAsFixed(0)} hours",
                                             style: const TextStyle(
@@ -404,11 +422,11 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           color: Theme.of(context).primaryColor,
                                         ),
                                         Text(
-                                          'Enjoyment',
+                                          'Happiness',
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 15,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -425,7 +443,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Icon(
+                                            Icons.hourglass_bottom_rounded,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${enjoyment.length.toString()} tasks",
                                             style: const TextStyle(
@@ -436,7 +457,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(Icons.timer_outlined),
+                                          Icon(
+                                            Icons.timer_outlined,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${calculateTotalHours(enjoyment).toStringAsFixed(0)} hours",
                                             style: const TextStyle(
@@ -508,7 +532,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.hourglass_bottom_rounded),
+                                          Icon(
+                                            Icons.hourglass_bottom_rounded,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${sleep.length.toString()} tasks",
                                             style: const TextStyle(
@@ -519,7 +546,10 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(Icons.timer_outlined),
+                                          Icon(
+                                            Icons.timer_outlined,
+                                            size: 20,
+                                          ),
                                           Text(
                                             " ${calculateTotalHours(sleep).toStringAsFixed(0)} hours",
                                             style: const TextStyle(

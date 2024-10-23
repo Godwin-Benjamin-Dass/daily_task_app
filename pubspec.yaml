@@ -52,6 +52,15 @@ dependencies:
   timezone: 
   workmanager: ^0.5.2
   disable_battery_optimization: ^1.1.1
+  flutter_launcher_icons: ^0.14.1
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_logo.jpg"  # Path to your app icon image
+  adaptive_icon_background: "#ffffff"     # Only for Android adaptive icons
+  adaptive_icon_foreground: "assets/images/app_logo.jpg"
   
 
 

@@ -26,7 +26,7 @@ class TaskProvider extends ChangeNotifier {
     _dailyTask.clear();
     List<TaskModel> tasks = await TaskService.getDefalutTasks(type: type);
     if (tasks.isEmpty) {
-      Fluttertoast.showToast(msg: 'Default Task is empty!');
+      Fluttertoast.showToast(msg: 'Default Task is Empty!');
       return;
     }
     for (var task in tasks) {
@@ -54,7 +54,7 @@ class TaskProvider extends ChangeNotifier {
     final possible = isSlotAvailable(task.startTime!, task.endTime!);
     if (!possible) {
       Fluttertoast.showToast(
-          msg: 'the slot is not available',
+          msg: 'The Slot is not Available',
           backgroundColor: Colors.red,
           textColor: Colors.white);
 
@@ -77,7 +77,7 @@ class TaskProvider extends ChangeNotifier {
             isSlotAvailable(task.startTime!, task.endTime!, idx: idx);
         if (!possible) {
           Fluttertoast.showToast(
-              msg: 'the slot is not available',
+              msg: 'The Slot is not Available',
               backgroundColor: Colors.red,
               textColor: Colors.white);
 
@@ -151,7 +151,7 @@ class TaskProvider extends ChangeNotifier {
           isDeafult: true, idx: idx);
       if (!possible) {
         Fluttertoast.showToast(
-            msg: 'the slot is not available',
+            msg: 'The Slot is not Available',
             backgroundColor: Colors.red,
             textColor: Colors.white);
 
@@ -206,11 +206,11 @@ class TaskProvider extends ChangeNotifier {
 
   Future saveDefaultTask({required String type}) async {
     if (_deafultTask.isEmpty) {
-      Fluttertoast.showToast(msg: 'please add some task');
+      Fluttertoast.showToast(msg: 'Please add some task');
       return false;
     }
     TaskService.saveDefaultTask(tasks: _deafultTask, type: type);
-    Fluttertoast.showToast(msg: 'saved');
+    Fluttertoast.showToast(msg: 'Saved');
     return true;
   }
 
