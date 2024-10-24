@@ -164,7 +164,8 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                                 ),
                               ),
                               Text(
-                                '${DateFormat("dd MMM yyyy").format(widget.task.date!)}',
+                                DateFormat("dd MMM yyyy")
+                                    .format(widget.task.date!),
                                 style: const TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -176,7 +177,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                   const SizedBox(
                     width: 15,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   if (widget.isNotificationPopUp == false)
                     Row(
                       children: [
@@ -230,7 +231,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                                 height: 25,
                                 fit: BoxFit.cover,
                                 color: Theme.of(context).primaryColor),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
@@ -250,7 +251,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                           Text(widget.task.description!),
                         ],
                       ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     const Text(
@@ -258,7 +259,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
                     InkWell(
@@ -274,7 +275,7 @@ class _TaskTileWidgetState extends State<TaskTileWidget> {
                           "${widget.task.link!}(click to launch url)",
                           style: const TextStyle(color: Colors.purple),
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
                     if (widget.task.app != null)

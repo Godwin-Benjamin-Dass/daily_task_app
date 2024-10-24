@@ -13,6 +13,8 @@ class TaskProvider extends ChangeNotifier {
 
   final List<TaskModel> _deafultTask = [];
   List<TaskModel> get deafultTask => _deafultTask;
+  String? _taskType;
+  String? get taskType => _taskType;
 
   getAllTask() async {
     _allTask = await TaskService.getAllTasks();
@@ -46,7 +48,9 @@ class TaskProvider extends ChangeNotifier {
 
       addOrEditAllTask(taskToBeAdded);
     }
-
+    TaskService.setDayType(
+        date: DateTime(date.year, date.month, date.day).toString(), type: type);
+    _taskType = type;
     notifyListeners();
   }
 
@@ -93,11 +97,19 @@ class TaskProvider extends ChangeNotifier {
   }
 
   deleteTask({required String id}) {
+    DateTime? date;
     int idx = _dailyTask.indexWhere((ele) => ele.id == id);
     if (idx != -1) {
+      date = _dailyTask[idx].date;
       _dailyTask.removeAt(idx);
     }
     deleteTaskInAllTask(id);
+
+    if (_dailyTask.isEmpty && date != null) {
+      TaskService.clearType(
+          date: DateTime(date.year, date.month, date.day).toString());
+      _taskType = null;
+    }
     notifyListeners();
   }
 
@@ -120,6 +132,8 @@ class TaskProvider extends ChangeNotifier {
           ? a.startTime!.hour.compareTo(b.startTime!.hour)
           : a.startTime!.minute.compareTo(b.startTime!.minute);
     });
+    _taskType = await TaskService.getDayType(
+        date: DateTime(date.year, date.month, date.day).toString().toString());
     notifyListeners();
   }
 

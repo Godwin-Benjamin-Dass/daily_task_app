@@ -37,13 +37,16 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
 
   getTaskAnalysis() {
     Future.delayed(Duration.zero, () {
+      // ignore: use_build_context_synchronously
       analyzerTask = Provider.of<TaskProvider>(context, listen: false)
           .getTasksForToAnalyse(
-              startDate: widget.startDate, endDate: widget.endDate);
+              startDate: widget.isParticularDay
+                  ? widget.startDate.add(const Duration(days: 1))
+                  : widget.startDate,
+              endDate: widget.endDate);
       health = analyzerTask.where((ele) => ele.category == 'Health').toList();
-      studies =
-          analyzerTask.where((ele) => ele.category == 'knowledge').toList();
-      money = analyzerTask.where((ele) => ele.category == 'Wealth').toList();
+      studies = analyzerTask.where((ele) => ele.category == 'Studies').toList();
+      money = analyzerTask.where((ele) => ele.category == 'Money').toList();
       enjoyment =
           analyzerTask.where((ele) => ele.category == 'Enjoyment').toList();
       sleep = analyzerTask.where((ele) => ele.category == 'Sleep').toList();
@@ -65,7 +68,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
               color: Colors.white,
             )),
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
+        title: const Text(
           'Analyzer',
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
@@ -181,7 +184,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 15,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -198,7 +201,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.hourglass_bottom_rounded,
                                             size: 20,
                                           ),
@@ -212,7 +215,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.timer_outlined,
                                             size: 20,
                                           ),
@@ -260,7 +263,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 14,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -277,7 +280,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.hourglass_bottom_rounded,
                                             size: 20,
                                           ),
@@ -291,7 +294,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.timer_outlined,
                                             size: 20,
                                           ),
@@ -347,7 +350,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 15,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -364,7 +367,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.hourglass_bottom_rounded,
                                             size: 20,
                                           ),
@@ -378,7 +381,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.timer_outlined,
                                             size: 20,
                                           ),
@@ -426,7 +429,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 14,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -443,7 +446,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.hourglass_bottom_rounded,
                                             size: 20,
                                           ),
@@ -457,7 +460,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.timer_outlined,
                                             size: 20,
                                           ),
@@ -515,7 +518,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
-                                              fontSize: 15,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -532,7 +535,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.hourglass_bottom_rounded,
                                             size: 20,
                                           ),
@@ -546,7 +549,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.timer_outlined,
                                             size: 20,
                                           ),
@@ -566,7 +569,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       )
                     ],
@@ -687,7 +690,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                             ),
                           ],
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                 ],
               ),
             ),

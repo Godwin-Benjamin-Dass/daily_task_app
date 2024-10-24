@@ -215,4 +215,22 @@ class TaskService {
       return TaskModel.fromJson(maps[i]);
     });
   }
+
+  static setDayType({required String date, required String type}) async {
+    final pref = await SharedPreferences.getInstance();
+    print(date + type);
+    await pref.setString(date, type);
+  }
+
+  static getDayType({required String date}) async {
+    final pref = await SharedPreferences.getInstance();
+    print(date);
+    print(pref.getString(date).toString() + "----------------->");
+    return pref.getString(date);
+  }
+
+  static clearType({required String date}) async {
+    final pref = await SharedPreferences.getInstance();
+    pref.remove(date);
+  }
 }
