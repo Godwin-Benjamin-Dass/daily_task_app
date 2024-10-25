@@ -289,12 +289,12 @@ getIcon(String icon) {
       return Icons.travel_explore;
     case 'Medicine':
       return Icons.medication;
-    case 'Study Time' || 'Studies':
+    case 'Study Time' || 'Knowledge':
       return Icons.school;
     case 'Playing':
       return Icons.sports_soccer;
-    case 'Entertainment' || 'Enjoyment':
-      return Icons.movie;
+    case 'Entertainment' || 'Happiness':
+      return Icons.emoji_emotions;
     default:
       return Icons.help; // Fallback icon in case no match is found
   }

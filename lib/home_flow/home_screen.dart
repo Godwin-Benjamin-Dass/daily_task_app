@@ -138,12 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             IconButton(
                                 onPressed: () {
                                   showCountPopup(context,
-                                      title: 'Studies',
+                                      title: 'Knowledge',
                                       count: Provider.of<TaskProvider>(context,
                                               listen: false)
                                           .dailyTask
                                           .where((ele) =>
-                                              ele.category == 'Studies')
+                                              ele.category == 'Knowledge')
                                           .toList()
                                           .length);
                                 },
@@ -172,12 +172,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             IconButton(
                                 onPressed: () {
                                   showCountPopup(context,
-                                      title: 'Enjoyment',
+                                      title: 'Happiness',
                                       count: Provider.of<TaskProvider>(context,
                                               listen: false)
                                           .dailyTask
                                           .where((ele) =>
-                                              ele.category == 'Enjoyment')
+                                              ele.category == 'Happiness')
                                           .toList()
                                           .length);
                                 },

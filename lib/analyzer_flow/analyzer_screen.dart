@@ -45,10 +45,11 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                   : widget.startDate,
               endDate: widget.endDate);
       health = analyzerTask.where((ele) => ele.category == 'Health').toList();
-      studies = analyzerTask.where((ele) => ele.category == 'Studies').toList();
+      studies =
+          analyzerTask.where((ele) => ele.category == 'Knowledge').toList();
       money = analyzerTask.where((ele) => ele.category == 'Money').toList();
       enjoyment =
-          analyzerTask.where((ele) => ele.category == 'Enjoyment').toList();
+          analyzerTask.where((ele) => ele.category == 'Happiness').toList();
       sleep = analyzerTask.where((ele) => ele.category == 'Sleep').toList();
       setState(() {});
     });

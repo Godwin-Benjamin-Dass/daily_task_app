@@ -141,9 +141,9 @@ addTaskDialog(BuildContext context,
               });
             }
           },
-          child: Text(
+          child: const Text(
             'Save',
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           )));
   // set up the AlertDialog
 
@@ -231,7 +231,7 @@ addTaskDialog(BuildContext context,
                               Icons.timer_sharp,
                               color: Theme.of(context).primaryColor,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 2,
                             ),
                             startTime == null
@@ -283,7 +283,7 @@ addTaskDialog(BuildContext context,
                             Icons.timer_sharp,
                             color: Theme.of(context).primaryColor,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 2,
                           ),
                           endTime == null
@@ -305,14 +305,32 @@ addTaskDialog(BuildContext context,
                       value: category,
                       items: <String>[
                         'Health',
-                        'Studies',
+                        'Knowledge',
                         'Money',
-                        'Enjoyment',
+                        'Happiness',
                         'Sleep'
                       ].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Row(
+                            children: [
+                              value == 'Sleep'
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Image.asset(
+                                        "assets/images/sleeping_icon.png",
+                                        width: 27,
+                                        height: 27,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Icon(getIcon(value)),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(value),
+                            ],
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -452,7 +470,7 @@ addTaskDialog(BuildContext context,
           ),
           actions: [
             closeButton,
-            SizedBox(
+            const SizedBox(
               width: 70,
             ),
             addButton,
