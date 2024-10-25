@@ -259,7 +259,7 @@ final List<Map<String, IconData>> taskIcons = [
 
 getIcon(String icon) {
   switch (icon) {
-    case 'Wealth':
+    case 'Wealth' || 'Money':
       return Icons.currency_rupee;
     case 'Health':
       return Icons.health_and_safety;
@@ -289,11 +289,11 @@ getIcon(String icon) {
       return Icons.travel_explore;
     case 'Medicine':
       return Icons.medication;
-    case 'Study Time':
+    case 'Study Time' || 'Studies':
       return Icons.school;
     case 'Playing':
       return Icons.sports_soccer;
-    case 'Entertainment':
+    case 'Entertainment' || 'Enjoyment':
       return Icons.movie;
     default:
       return Icons.help; // Fallback icon in case no match is found
