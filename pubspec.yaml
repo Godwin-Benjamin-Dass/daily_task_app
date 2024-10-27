@@ -53,6 +53,7 @@ dependencies:
   workmanager: ^0.5.2
   disable_battery_optimization: ^1.1.1
   flutter_launcher_icons: ^0.14.1
+  text_scroll: ^0.2.0
 
 
 flutter_icons:

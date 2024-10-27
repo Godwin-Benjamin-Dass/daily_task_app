@@ -15,6 +15,10 @@ class TaskProvider extends ChangeNotifier {
   List<TaskModel> get deafultTask => _deafultTask;
   String? _taskType;
   String? get taskType => _taskType;
+  bool _isTaskOngoing = false;
+  bool get isTaskOngoing => _isTaskOngoing;
+  TaskModel? _ongoingTask;
+  TaskModel? get ongoingTask => _ongoingTask;
 
   getAllTask() async {
     _allTask = await TaskService.getAllTasks();
@@ -28,7 +32,7 @@ class TaskProvider extends ChangeNotifier {
     _dailyTask.clear();
     List<TaskModel> tasks = await TaskService.getDefalutTasks(type: type);
     if (tasks.isEmpty) {
-      Fluttertoast.showToast(msg: 'Default Task is Empty!');
+      Fluttertoast.showToast(msg: '$type Task is Empty!');
       return;
     }
     for (var task in tasks) {
@@ -93,6 +97,8 @@ class TaskProvider extends ChangeNotifier {
 
     notifyListeners();
     addOrEditAllTask(task);
+    checkOngoingTask();
+
     return true;
   }
 
@@ -135,6 +141,7 @@ class TaskProvider extends ChangeNotifier {
     _taskType = await TaskService.getDayType(
         date: DateTime(date.year, date.month, date.day).toString().toString());
     notifyListeners();
+    checkOngoingTask();
   }
 
   addOrEditAllTask(TaskModel task) async {
@@ -226,6 +233,18 @@ class TaskProvider extends ChangeNotifier {
     TaskService.saveDefaultTask(tasks: _deafultTask, type: type);
     Fluttertoast.showToast(msg: 'Saved');
     return true;
+  }
+
+  checkOngoingTask() {
+    int idx = _dailyTask.indexWhere((ele) => ele.status == 'pending');
+    if (idx != -1) {
+      _ongoingTask = _dailyTask[idx];
+      _isTaskOngoing = true;
+    } else {
+      _isTaskOngoing = false;
+      _ongoingTask = null;
+    }
+    notifyListeners();
   }
 
   getTasksForToAnalyse(

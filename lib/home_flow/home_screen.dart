@@ -1,12 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:daily_task_app/home_flow/add_task_popup.dart';
+import 'package:daily_task_app/services/notification_service.dart';
 import 'package:daily_task_app/setting_flow/settings_page.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
+import 'package:daily_task_app/widgets/home_tile.dart';
 import 'package:daily_task_app/widgets/task_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   setData() async {
     await Provider.of<TaskProvider>(context, listen: false).getAllTask();
     await Provider.of<TaskProvider>(context, listen: false)
-        .getTaskForParticularDay(date: DateTime.now());
+        .getTaskForParticularDay(date: date);
   }
 
   final f = DateFormat('yyyy-MM-dd');
@@ -241,168 +244,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: const Text(
-                                      "Select type",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.55,
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .primaryColor,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8))),
-                                              onPressed: () {
-                                                task
-                                                    .copyDefalutTask(
-                                                        date: date,
-                                                        type: 'Week-day')
-                                                    .then((val) {
-                                                  setData();
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                              child: const Text(
-                                                'Week Day',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              )),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.55,
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .primaryColor,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8))),
-                                              onPressed: () {
-                                                task
-                                                    .copyDefalutTask(
-                                                        date: date,
-                                                        type: 'Week-end')
-                                                    .then((val) {
-                                                  setData();
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                              child: const Text(
-                                                'Week End',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              )),
-                                        )
-                                      ],
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text(
-                                            'Close',
-                                            style: TextStyle(color: Colors.red),
-                                          ))
-                                    ],
-                                  ));
-                        },
-                        child: Container(
-                          height: 120,
-                          width: double.infinity,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage(
-                                    'assets/images/animationBG.png')),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Copy Default Schedule',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Icon(
-                                Icons.copy,
-                                color: Theme.of(context).primaryColor,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                    HomeTile(
+                        title: 'Copy Week-Day Schedule',
+                        iconData: Icons.copy,
+                        ontap: () {
+                          task
+                              .copyDefalutTask(date: date, type: 'Week-day')
+                              .then((val) {
+                            setData();
+                          });
+                        }),
+                    HomeTile(
+                      iconData: Icons.copy,
+                      title: 'Copy Week-End Schedule',
+                      ontap: () {
+                        task
+                            .copyDefalutTask(date: date, type: 'Week-end')
+                            .then((val) {
+                          setData();
+                        });
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: InkWell(
-                          onTap: () {
-                            addTaskDialog(date: date, context, isEdit: false);
-                          },
-                          child: Container(
-                            height: 120,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage(
-                                      'assets/images/animationBG.png')),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Create Your Own Schedule',
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Icon(
-                                  Icons.add_alert_outlined,
-                                  color: Theme.of(context).primaryColor,
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
+                    HomeTile(
+                        title: 'Create Your Own Schedule',
+                        iconData: Icons.add_alert_outlined,
+                        ontap: () {
+                          addTaskDialog(date: date, context, isEdit: false);
+                        }),
                   ],
                 ),
               )
@@ -417,20 +285,47 @@ class _HomeScreenState extends State<HomeScreen> {
                         .withOpacity(0.8), // Apply a semi-transparent color
                     colorBlendMode: BlendMode.lighten,
                   )),
-                  ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: task.dailyTask.length,
-                      itemBuilder: (ctx, i) {
-                        return TaskTileWidget(
-                            idx: i + 1,
-                            task: task.dailyTask[i],
-                            ontap: () {
-                              addTaskDialog(context,
-                                  date: date,
-                                  isEdit: true,
-                                  task: task.dailyTask[i]);
-                            });
-                      }),
+                  SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        if (task.isTaskOngoing)
+                          IconButton(
+                            onPressed: () async {
+                              await NotificationService.showDialogs(
+                                  task.ongoingTask!);
+                            },
+                            icon: TextScroll(
+                              'Task: ${task.ongoingTask!.task}, Started at: ${task.ongoingTask!.startTime!.hour}:${task.ongoingTask!.startTime!.minute}, Ends at: ${task.ongoingTask!.endTime!.hour}:${task.ongoingTask!.endTime!.minute}, Click here to view more about this task.',
+                              mode: TextScrollMode.endless,
+                              velocity: const Velocity(
+                                  pixelsPerSecond: Offset(75, 0)),
+                              delayBefore: const Duration(milliseconds: 500),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.red),
+                              textAlign: TextAlign.right,
+                              selectable: true,
+                            ),
+                          ),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: task.dailyTask.length,
+                            itemBuilder: (ctx, i) {
+                              return TaskTileWidget(
+                                  idx: i + 1,
+                                  task: task.dailyTask[i],
+                                  ontap: () {
+                                    addTaskDialog(context,
+                                        date: date,
+                                        isEdit: true,
+                                        task: task.dailyTask[i]);
+                                  });
+                            }),
+                      ],
+                    ),
+                  ),
                 ],
               ),
       ),
