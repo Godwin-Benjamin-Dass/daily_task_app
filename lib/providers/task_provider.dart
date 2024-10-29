@@ -25,8 +25,8 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<TaskModel> _analyseTask = [];
-  List<TaskModel> get analyseTask => _analyseTask;
+  // List<TaskModel> _analyseTask = [];
+  // List<TaskModel> get analyseTask => _analyseTask;
 
   Future copyDefalutTask({required DateTime date, required String type}) async {
     _dailyTask.clear();
@@ -142,6 +142,7 @@ class TaskProvider extends ChangeNotifier {
         date: DateTime(date.year, date.month, date.day).toString().toString());
     notifyListeners();
     checkOngoingTask();
+    return _dailyTask;
   }
 
   addOrEditAllTask(TaskModel task) async {
@@ -247,29 +248,42 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getTasksForToAnalyse(
-      {required DateTime startDate, required DateTime endDate}) async {
+  getTasksForToAnalyse({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
     await getAllTask();
-    _analyseTask.clear();
+    List<TaskModel> tasksToAnalyse = [];
 
-    _analyseTask = _allTask
-        .where((ele) =>
-            (ele.date!.isAfter(startDate) && ele.date!.isBefore(endDate) ||
-                (ele.date == startDate) ||
-                (ele.date == endDate)))
-        .toList();
-    _analyseTask.sort((a, b) {
+    // Adjust endDate to include the entire last day
+    final adjustedEndDate = DateTime(
+      endDate.year,
+      endDate.month,
+      endDate.day,
+      23,
+      59,
+      59,
+    );
+
+    tasksToAnalyse = _allTask.where((task) {
+      final taskDate = task.date!;
+      return (taskDate.isAfter(startDate) &&
+              taskDate.isBefore(adjustedEndDate)) ||
+          taskDate.isAtSameMomentAs(startDate) ||
+          taskDate.isAtSameMomentAs(adjustedEndDate);
+    }).toList();
+
+    tasksToAnalyse.sort((a, b) {
       int dateComparison = a.date!.compareTo(b.date!);
       if (dateComparison != 0) {
-        return dateComparison; // If the dates are different, return the comparison
+        return dateComparison; // Sort by date first
       }
-      // If the dates are the same, compare the startTime
-      return a.startTime!.hour.compareTo(b.startTime!.hour) != 0
-          ? a.startTime!.hour.compareTo(b.startTime!.hour)
-          : a.startTime!.minute.compareTo(b.startTime!.minute);
+      // If dates are the same, sort by startTime
+      return a.startTime!.hour.compareTo(b.startTime!.hour);
     });
+
     notifyListeners();
-    return _analyseTask;
+    return tasksToAnalyse;
   }
 
   bool isSlotAvailable(TimeOfDay startTime, TimeOfDay endTime,

@@ -173,10 +173,8 @@ class _AnalyzerHomeState extends State<AnalyzerHome> {
                             MaterialPageRoute(
                                 builder: (context) => AnalyzerScreen(
                                       isParticularDay: true,
-                                      startDate: particularDate!
-                                          .subtract(const Duration(days: 1)),
-                                      endDate: particularDate!
-                                          .add(const Duration(days: 1)),
+                                      startDate: particularDate!,
+                                      endDate: particularDate!,
                                     )));
                       } else {
                         if (startDate == null || endDate == null) {

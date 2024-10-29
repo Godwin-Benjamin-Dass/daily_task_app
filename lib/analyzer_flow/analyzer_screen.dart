@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:daily_task_app/analyzer_flow/view_tasks_data.dart';
 import 'package:daily_task_app/models/task_model.dart';
 import 'package:daily_task_app/providers/task_provider.dart';
@@ -37,13 +39,14 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
 
   getTaskAnalysis() {
     Future.delayed(Duration.zero, () async {
-      // ignore: use_build_context_synchronously
-      analyzerTask = await Provider.of<TaskProvider>(context, listen: false)
-          .getTasksForToAnalyse(
-              startDate: widget.isParticularDay
-                  ? widget.startDate.add(const Duration(days: 1))
-                  : widget.startDate,
-              endDate: widget.endDate);
+      if (widget.isParticularDay) {
+        analyzerTask = await Provider.of<TaskProvider>(context, listen: false)
+            .getTaskForParticularDay(date: widget.startDate);
+      } else {
+        analyzerTask = await Provider.of<TaskProvider>(context, listen: false)
+            .getTasksForToAnalyse(
+                startDate: widget.startDate, endDate: widget.endDate);
+      }
       health = analyzerTask.where((ele) => ele.category == 'Health').toList();
       studies =
           analyzerTask.where((ele) => ele.category == 'Knowledge').toList();
@@ -96,9 +99,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                         width: 8,
                       ),
                       Text(
-                        DateFormat("dd MMM yy").format(widget.isParticularDay
-                            ? widget.startDate.add(const Duration(days: 1))
-                            : widget.startDate),
+                        DateFormat("dd MMM yy").format(widget.startDate),
                         style: const TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 16),
                       ),
@@ -124,7 +125,7 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
                         width: 10,
                       ),
                       Text(
-                        task.analyseTask.length.toString(),
+                        analyzerTask.length.toString(),
                         style: const TextStyle(
                             fontWeight: FontWeight.w800, fontSize: 18),
                       ),
