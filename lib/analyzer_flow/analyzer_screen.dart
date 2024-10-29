@@ -36,9 +36,9 @@ class _AnalyzerScreenState extends State<AnalyzerScreen> {
   bool taskBreakUp = false;
 
   getTaskAnalysis() {
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       // ignore: use_build_context_synchronously
-      analyzerTask = Provider.of<TaskProvider>(context, listen: false)
+      analyzerTask = await Provider.of<TaskProvider>(context, listen: false)
           .getTasksForToAnalyse(
               startDate: widget.isParticularDay
                   ? widget.startDate.add(const Duration(days: 1))

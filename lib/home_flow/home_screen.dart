@@ -218,7 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: Row(
                         children: [
-                          const Spacer(),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
@@ -227,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   border: Border.all()),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text("Task type: ${task.taskType}"),
+                                child: Text("Schedule type: ${task.taskType}"),
                               ),
                             ),
                           ),
@@ -313,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: task.dailyTask.length,
                             itemBuilder: (ctx, i) {
+                              print(task.dailyTask[i].date);
                               return TaskTileWidget(
                                   idx: i + 1,
                                   task: task.dailyTask[i],

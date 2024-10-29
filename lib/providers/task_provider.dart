@@ -20,7 +20,7 @@ class TaskProvider extends ChangeNotifier {
   TaskModel? _ongoingTask;
   TaskModel? get ongoingTask => _ongoingTask;
 
-  getAllTask() async {
+  Future getAllTask() async {
     _allTask = await TaskService.getAllTasks();
     notifyListeners();
   }
@@ -248,12 +248,15 @@ class TaskProvider extends ChangeNotifier {
   }
 
   getTasksForToAnalyse(
-      {required DateTime startDate, required DateTime endDate}) {
-    getAllTask();
+      {required DateTime startDate, required DateTime endDate}) async {
+    await getAllTask();
     _analyseTask.clear();
+
     _analyseTask = _allTask
         .where((ele) =>
-            (ele.date!.isAfter(startDate) && ele.date!.isBefore(endDate)))
+            (ele.date!.isAfter(startDate) && ele.date!.isBefore(endDate) ||
+                (ele.date == startDate) ||
+                (ele.date == endDate)))
         .toList();
     _analyseTask.sort((a, b) {
       int dateComparison = a.date!.compareTo(b.date!);
